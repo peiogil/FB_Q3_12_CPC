@@ -10,9 +10,9 @@ CND_CONF=default
 CND_DISTDIR=dist
 TMPDIR=build/${CND_CONF}/${IMAGE_TYPE}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-OUTPUT_BASENAME=FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
-PACKAGE_TOP_DIR=flaybackq312cpc.x/
+OUTPUT_PATH=dist/${CND_CONF}/${IMAGE_TYPE}/FB_Q3_12_CPC.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+OUTPUT_BASENAME=FB_Q3_12_CPC.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
+PACKAGE_TOP_DIR=fbq312cpc/
 
 # Functions
 function checkReturnCode
@@ -57,15 +57,15 @@ mkdir -p ${TMPDIR}
 
 # Copy files and create directories and links
 cd "${TOP}"
-makeDirectory ${TMPDIR}/flaybackq312cpc.x/bin
+makeDirectory ${TMPDIR}/fbq312cpc/bin
 copyFileToTmpDir "${OUTPUT_PATH}" "${TMPDIR}/${PACKAGE_TOP_DIR}bin/${OUTPUT_BASENAME}" 0755
 
 
 # Generate tar file
 cd "${TOP}"
-rm -f ${CND_DISTDIR}/${CND_CONF}/package/flaybackq312cpc.x.tar
+rm -f ${CND_DISTDIR}/${CND_CONF}/package/fbq312cpc.tar
 cd ${TMPDIR}
-tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/flaybackq312cpc.x.tar *
+tar -vcf ../../../../${CND_DISTDIR}/${CND_CONF}/package/fbq312cpc.tar *
 checkReturnCode
 
 # Cleanup

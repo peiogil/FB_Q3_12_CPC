@@ -1,0 +1,1198 @@
+Disassembly Listing for FLAYBACK_Q3_12_CPC
+Generated From:
+C:/Users/peiog/MPLABXProjects/FB_Q3_12_CPC/dist/default/debug/FB_Q3_12_CPC.debug.elf
+May 30, 2023 7:16:47 PM
+
+---  C:/Users/peiog/MPLABXProjects/FB_Q3_12_CPC/pid_TIPO_II_FB_Q3_12_CPC.s  -----------------------------
+                                                  1:     ; ******************************************************************************
+                                                  2:     ; * © 2008 Microchip Technology Inc.
+                                                  3:     ; *
+                                                  4:     ; SOFTWARE LICENSE AGREEMENT:
+                                                  5:     ; Microchip Technology Incorporated ("Microchip") retains all ownership and 
+                                                  6:     ; intellectual property rights in the code accompanying this message and in all 
+                                                  7:     ; derivatives hereto.  You may use this code, and any derivatives created by 
+                                                  8:     ; any person or entity by or on your behalf, exclusively with Microchip's
+                                                  9:     ; proprietary products.  Your acceptance and/or use of this code constitutes 
+                                                  10:    ; agreement to the terms and conditions of this notice.
+                                                  11:    ;
+                                                  12:    ; CODE ACCOMPANYING THIS MESSAGE IS SUPPLIED BY MICROCHIP "AS IS".  NO 
+                                                  13:    ; WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+                                                  14:    ; TO, IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A 
+                                                  15:    ; PARTICULAR PURPOSE APPLY TO THIS CODE, ITS INTERACTION WITH MICROCHIP'S 
+                                                  16:    ; PRODUCTS, COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+                                                  17:    ;
+                                                  18:    ; YOU ACKNOWLEDGE AND AGREE THAT, IN NO EVENT, SHALL MICROCHIP BE LIABLE, WHETHER 
+                                                  19:    ; IN CONTRACT, WARRANTY, TORT (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), 
+                                                  20:    ; STRICT LIABILITY, INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, 
+                                                  21:    ; PUNITIVE, EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF 
+                                                  22:    ; ANY KIND WHATSOEVER RELATED TO THE CODE, HOWSOEVER CAUSED, EVEN IF MICROCHIP HAS BEEN 
+                                                  23:    ; ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
+                                                  24:    ; ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY RELATED TO 
+                                                  25:    ; THIS CODE, SHALL NOT EXCEED THE PRICE YOU PAID DIRECTLY TO MICROCHIP SPECIFICALLY TO 
+                                                  26:    ; HAVE THIS CODE DEVELOPED.
+                                                  27:    ;
+                                                  28:    ; You agree that you are solely responsible for testing the code and 
+                                                  29:    ; determining its suitability.  Microchip has no obligation to modify, test, 
+                                                  30:    ; certify, or support the code.
+                                                  31:    ;
+                                                  32:    ; *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                  33:    
+                                                  34:            ; Local inclusions.
+                                                  35:            .nolist
+                                                  36:        	.include        "dspcommon.inc"         ; fractsetup
+                                                  37:            .list
+                                                  38:    
+                                                  39:            .equ    offsetabcCoefficients, 0
+                                                  40:            .equ    offsetcontrolHistory, 2
+                                                  41:            .equ    offsetcontrolOutput, 4
+                                                  42:            .equ    offsetmeasuredOutput, 6
+                                                  43:            .equ    offsetcontrolReference, 8
+                                                  44:    
+                                                  45:    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  46:    
+                                                  47:            .section .libdsp, code 	; la libreria dsp se añade
+                                                  48:    
+                                                  49:    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  50:    
+                                                  51:    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  52:    ; _PIDInitBuck2:
+                                                  53:    ;
+                                                  54:    ; Prototype:
+                                                  55:    ; void PIDInitBuck2 ( tPID *fooPIDStruct )
+                                                  56:    ;
+                                                  57:    ; Operation: This routine clears the delay line elements in the array
+                                                  58:    ;            _ControlHistory, as well as clears the current PID output
+                                                  59:    ;            element, _ControlOutput
+                                                  60:    ;
+                                                  61:    ; Input:
+                                                  62:    ;       w0 = Address of data structure tPID (type defined in dsp.h)
+                                                  63:    ;
+                                                  64:    ; Return:
+                                                  65:    ;       (void)
+                                                  66:    ;
+                                                  67:    ; System resources usage:
+                                                  68:    ;       w0             used, restored
+                                                  69:    ;
+                                                  70:    ; DO and REPEAT instruction usage.
+                                                  71:    ;       0 level DO instruction
+                                                  72:    ;       0 REPEAT intructions
+                                                  73:    ;
+                                                  74:    ; Program words (24-bit instructions):
+                                                  75:    ;       ??
+                                                  76:    ;
+                                                  77:    ; Cycles (including C-function call and return overheads):
+                                                  78:    ;       ??
+                                                  79:    ;............................................................................
+                                                  80:    
+                                                  81:    ; definicion de la funcion _PIDInitBoost
+                                                  82:    .global _PIDInitBuck2
+                                                  83:    ; inicio de la funcion
+                                                  84:    _PIDInitBuck2:
+                                                  85:    ; se resetean las posiciones de memoria donde iran los errores y los d.
+0002FE  781F80     MOV W0, [W15++]                86:    push w0
+000300  B00040     ADD #0x4, W0                   87:    add #offsetcontrolOutput, w0
+000302  EB0800     CLR [W0]                       88:    clr [w0]
+000304  78004F     MOV [--W15], W0                89:    pop w0
+000306  781F80     MOV W0, [W15++]                90:    push w0
+000308  900010     MOV [W0+2], W0                 91:    mov [w0 + #offsetcontrolHistory], w0
+00030A  EB1800     CLR [W0++]                     92:    clr [w0++] ; e[n] = 0
+00030C  EB1800     CLR [W0++]                     93:    clr [w0++] ; e[n-1] = 0
+00030E  EB1800     CLR [W0++]                     94:    clr [w0++] ; e[n-2] = 0
+000310  EB1800     CLR [W0++]                     95:    clr [w0++] ; d[n-1]=0
+000312  EB0800     CLR [W0]                       96:    clr [w0] ; d[n-2] = 0
+                                                  97:    
+000314  78004F     MOV [--W15], W0                98:    pop w0 
+000316  060000     RETURN                         99:    return
+                                                  100:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  101:   ;
+                                                  102:   ; _PIDBOOST:
+                                                  103:   ; Prototype:
+                                                  104:   ;              tPID PID ( tPID *fooPIDStruct )
+                                                  105:   ;
+                                                  106:   ; Operation:
+                                                  107:   ;
+                                                  108:   ;                                           
+                                                  109:   ;Reference                                                        
+                                                  110:   ;Input         ---                    ------------------                 ----------
+                                                  111:   ;     --------| + |  Control         |b0+b1Z^-1..b3Z^-3 | Control       | Output   |       
+                                                  112:   ;             |   |----------|----|  |---------------   | ------------  | Plant    |----
+                                                  113:   ;        -----| - |Difference        | 1+a1Z^-1..a3Z^-3 |      	        |          |    |
+                                                  114:   ;       |      ---  (error)  |        ------------------                 -----------    |
+                                                  115:   ;       |                                                                               |
+                                                  116:   ;       | Measured                                                                      |
+                                                  117:   ;       | Outut                                                                         |
+                                                  118:   ;       |                                                                               |
+                                                  119:   ;       |                                                                               |
+                                                  120:   ;       |                                                                               |
+                                                  121:   ;        --------------------------------------------------------------------------------
+                                                  122:   ;
+                                                  123:   ; Input:
+                                                  124:   ;       w0 = Address of tPID data structure
+                                                  125:   
+                                                  126:   ; Return:
+                                                  127:   ;       w0 = Address of tPID data structure
+                                                  128:   ;
+                                                  129:   ; System resources usage:
+                                                  130:   ;       {w0..w5}        used, not restored
+                                                  131:   ;       {w8,w10}        saved, used, restored
+                                                  132:   ;        AccA, AccB     used, not restored
+                                                  133:   ;        CORCON         saved, used, restored
+                                                  134:   ;
+                                                  135:   ; DO and REPEAT instruction usage.
+                                                  136:   ;       0 level DO instruction
+                                                  137:   ;       0 REPEAT intructions
+                                                  138:   ;
+                                                  139:   ; Program words (24-bit instructions):
+                                                  140:   ;       ??
+                                                  141:   ;
+                                                  142:   ; Cycles (including C-function call and return overheads):
+                                                  143:   ;       ??
+                                                  144:   ;............................................................................
+                                                  145:   ;Justificación de cómo se trabaja con la reprentación Q3.12 en
+                                                  146:   ;GuionNoAprendizajePorProyectosPictail_PRACTICAS_PRESENCIAL
+                                                  147:     .global _PIDBUCK2                    ; provide global scope to routine
+                                                  148:   _PIDBUCK2:
+                                                  149:           ;btg LATD, #1
+                                                  150:           ; Save working registers.
+000318  FEA000     PUSH.S                         151:           push.s
+00031A  781F84     MOV W4, [W15++]                152:           push    w4
+00031C  781F85     MOV W5, [W15++]                153:           push    w5        
+00031E  781F88     MOV W8, [W15++]                154:           push    w8
+000320  781F8A     MOV W10, [W15++]               155:           push    w10
+                                                  156:           
+000322  F80044     PUSH CORCON                    157:           push    CORCON                  ; Prepare CORCON for fractional computation.
+                                                  158:   
+                                                  159:   
+000324  200F08     MOV #0xF0, W8                  160:           fractsetup      w8	; macro para q
+                                                  161:   ; se toman los valores de los campos de la variable tpid en los siguientes resitros de trabajo
+000328  900400     MOV [W0+0], W8                 162:           mov [w0 + #offsetabcCoefficients], w8    ; w8 = Base Address of _abcCoefficients array 
+                                                  163:   ;w10 <----- puntero a la primera posicion de memoria con error o d (memoria y)      
+00032A  900510     MOV [W0+2], W10                164:    		mov [w0 + #offsetcontrolHistory], w10    ; w10 = Base Address of _ControlHistory array (state/delay line)
+                                                  165:   
+                                                  166:   ;w2 <----- valor actual de la variable a controlar (vout del reductor 2)
+00032C  900130     MOV [W0+6], W2                 167:           mov [w0 + #offsetmeasuredOutput], w2
+                                                  168:   ;w3 <----- valor actual de la referencia a alcanzar
+00032E  9001C0     MOV [W0+8], W3                 169:           mov [w0 + #offsetcontrolReference], w3
+                                                  170:   ;recolocacion de las posiciones de error en sus nuevas posiciones
+                                                  171:   ; dejando e[n] listo para actualizarlo con el valor nuevo de error.
+000330  90059A     MOV [W10+2], W11               172:   		mov [w10 + #+2],w11
+000332  98052B     MOV W11, [W10+4]               173:   		mov w11, [w10 + #+4] ;e[n-1]==> e[n-2]
+000334  78059A     MOV [W10], W11                 174:   		mov [w10],w11
+000336  98051B     MOV W11, [W10+2]               175:   		mov w11, [w10 + #+2] ;e[n]==> e[n-1]
+                                                  176:   		; ([W10])-->e[n]<== LIBRE
+                                                  177:   ; Calculate most recent error with saturation, no limit checking required
+                                                  178:   		; acumulador a<-----w3(referencia), a = tpid.controlreference
+000338  CA0003     LAC W3, A                      179:   		lac w3, a
+                                                  180:   		; acumulador b<-----w2(valor actual de la variable a controlar), b = tpid.measuredoutput
+00033A  CA8002     LAC W2, B                      181:   		lac w2, b
+                                                  182:   		; acumulador a<-----referencia-valor actual, error [n]
+00033C  CB3000     SUB A                          183:   		sub a
+                                                  184:   		; se redondea sac.r(store acumulator with rounding) 
+                                                  185:   		;y se mete en [w10], e[n]
+                                                  186:   		; (se redondea, porque acc 40 bits y [w10], 16 bits)
+00033E  CD001A     SAC.R A, [W10]                 187:   		sac.r a, [w10]
+                                                  188:   ;------Funcion de transferencia a programar----------------------
+                                                  189:   ;
+                                                  190:   ;		 1.638 z^2 + 0.02142 z - 1.617
+                                                  191:   ;		-----------------------------
+                                                  192:   ;   		z^2 - 1.968 z + 0.9678
+                                                  193:   ;
+                                                  194:   ;-----------------------------------------------------------------
+                                                  195:   		;[w10] apunta a e[n] de la matriz Buck2Votalge History
+                                                  196:   
+                                                  197:   ; w4 = b1, w5 = e[n-1] , [w8]=b2 ,[w10]=e[n-2]
+000340  C30112     CLR A                          198:   		clr a
+000342  780238     MOV [W8++], W4                 199:   		mov [w8++],w4
+000344  7802BA     MOV [W10++], W5                200:   		mov [w10++],w5		
+000346  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5201:   		mac w4*w5, a, [w8]+=2, w4, [w10]+=2, w5
+                                                  202:   ;-----------------------------------------------------------------
+                                                  203:   		; a = e[n]+b0 * e[n] + b1 * e[n-1]
+                                                  204:   		; w4 = b2, w5 = e[n-2], [w8]=a1 ,[w10]=d[n-1]
+000348  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5205:   		mac w4*w5, a, [w8]+=2, w4, [w10]+=2, w5
+                                                  206:   ;--------------------------------------------------------------------
+                                                  207:   		; a = b0 * e[n] + b1 * e[n-1] + b2 * e[n-2]
+                                                  208:   		; w4 = a1, w5 = d[n-1], [w8]=a2 ,[w10]=d[n-2]
+00034A  C00446     MAC W4*W5, A, [W8]+=2, W4, [W10]+=2, W5209:   		mac w4*w5, a, [w8]+=2, w4, [w10]+=2, w5
+                                                  210:   
+                                                  211:   ;-------------------------------------------------------------------
+                                                  212:   		;a = e[n]+b0 * e[n] + b1 * e[n-1] + b2 * e[n-2] +a1 * d[n-1]
+                                                  213:   		; w4 = a2, w5 = d[n-2], [w8]=a2 ,[w10]=d[n-1]
+00034C  C0041E     MAC W4*W5, A, [W8], W4, [W10]-=2, W5214:   		mac w4*w5, a, [w8], w4, [w10]-=2, w5
+                                                  215:   		; se mete d[n-2] en el registro intermedio del acumulador b (high)
+                                                  216:   ;-----------------------------------------------------------------------------
+                                                  217:   		; a = e[n]+b0 * e[n] + b1 * e[n-1] + b2 * e[n-2] +a1 * d[n-1]+ a2 * d[n-2] 
+00034E  C00112     MAC W4*W5, A                   218:   		mac w4*w5, a, 	
+                                                  219:   ;-------------------------------------------------------------------------------
+                                                  220:   ;Se guarda a en w5 para conservar el signo 
+000350  CC0005     SAC A, W5                      221:   sac a,w5
+                                                  222:   ;Se deplaza el acumulador 3 posiciones
+                                                  223:   ;hacia la izquierda para ajustar a Q3_12
+000352  C8007D     SFTAC A, #-3                   224:   sftac a,#-3
+000354  CD0004     SAC.R A, W4                    225:   sac.r a,w4
+                                                  226:   ;Ahora, el signo guardado en w5, se pasa a w4
+000356  A6F005     BTSS W5, #15                   227:   btss w5,#15
+000358  370002     BRA 0x35E                      228:   bra clr15
+00035A  A0F004     BSET W4, #15                   229:   bset w4,#0xf
+00035C  370001     BRA 0x360                      230:   bra seguir
+                                                  231:   clr15:
+00035E  A1F004     BCLR W4, #15                   232:   bclr w4,#15
+                                                  233:   
+                                                  234:   seguir:
+                                                  235:   
+                                                  236:   
+                                                  237:   ;mov w4, [w0 + #offsetcontrolOutput]
+                                                  238:   
+000360  78059A     MOV [W10], W11                 239:   mov [w10],w11
+000362  98051B     MOV W11, [W10+2]               240:   mov w11, [w10 + #+2] ; d[n-1,anterior]==>d[n-2]
+000364  780D04     MOV W4, [W10]                  241:   mov w4,[w10]		;;w4==>d[n-1]
+000366  980024     MOV W4, [W0+4]                 242:   mov w4, [w0 + #offsetcontrolOutput]
+                                                  243:   ; se recupera de la pila lo que había en los registros que han sido usados
+000368  F90044     POP CORCON                     244:   pop CORCON
+00036A  78054F     MOV [--W15], W10               245:   pop w10
+00036C  78044F     MOV [--W15], W8                246:   pop w8
+00036E  7802CF     MOV [--W15], W5                247:   pop w5
+000370  78024F     MOV [--W15], W4                248:   pop w4
+000372  FE8000     POP.S                          249:   pop.s
+000374  060000     RETURN                         250:   return
+                                                  251:   
+                                                  252:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  253:   
+                                                  254:           .end
+                                                  255:   
+                                                  256:   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                  257:   ; OEF
+                                                  258:   
+                                                  259:   
+                                                  260:   
+                                                  261:   
+                                                  262:   
+---  C:/Users/peiog/MPLABXProjects/FB_Q3_12_CPC/main.c  -------------------------------------------------
+1:                 /**********************************************************************
+2:                 * © 2008 Microchip Technology Inc.
+3:                 *
+4:                 * SOFTWARE LICENSE AGREEMENT:
+5:                 * Microchip Technology Incorporated ("Microchip") retains all ownership and 
+6:                 * intellectual property rights in the code accompanying this message and in all 
+7:                 * derivatives hereto.  You may use this code, and any derivatives created by 
+8:                 * any person or entity by or on your behalf, exclusively with Microchip's
+9:                 * proprietary products.  Your acceptance and/or use of this code constitutes 
+10:                * agreement to the terms and conditions of this notice.
+11:                *
+12:                * CODE ACCOMPANYING THIS MESSAGE IS SUPPLIED BY MICROCHIP "AS IS".  NO 
+13:                * WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+14:                * TO, IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A 
+15:                * PARTICULAR PURPOSE APPLY TO THIS CODE, ITS INTERACTION WITH MICROCHIP'S 
+16:                * PRODUCTS, COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+17:                *
+18:                * YOU ACKNOWLEDGE AND AGREE THAT, IN NO EVENT, SHALL MICROCHIP BE LIABLE, WHETHER 
+19:                * IN CONTRACT, WARRANTY, TORT (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), 
+20:                * STRICT LIABILITY, INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, 
+21:                * PUNITIVE, EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF 
+22:                * ANY KIND WHATSOEVER RELATED TO THE CODE, HOWSOEVER CAUSED, EVEN IF MICROCHIP HAS BEEN 
+23:                * ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
+24:                * ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY RELATED TO 
+25:                * THIS CODE, SHALL NOT EXCEED THE PRICE YOU PAID DIRECTLY TO MICROCHIP SPECIFICALLY TO 
+26:                * HAVE THIS CODE DEVELOPED.
+27:                *
+28:                * You agree that you are solely responsible for testing the code and 
+29:                * determining its suitability.  Microchip has no obligation to modify, test, 
+30:                * certify, or support the code.
+31:                *
+32:                *******************************************************************************/
+33:                
+34:                #include "p33FJ16GS502.h"
+35:                #include "Functions.h"
+36:                #include "dsp.h"
+37:                _FOSCSEL(FNOSC_FRC)
+38:                _FOSC(FCKSM_CSECMD & OSCIOFNC_ON)
+39:                _FWDT(FWDTEN_OFF)
+40:                _FPOR(FPWRT_PWR128)
+41:                _FICD(ICS_PGD2 & JTAGEN_OFF)
+42:                
+43:                #define INPUTUNDERVOLTAGE 391					/* Input voltage <7V --> 2.2k/(10k+2.2k)*7V = 1.2623V
+44:                												Now calculate the ADC expected value = 1.2623/3.3*1023 = 391 */
+45:                #define INPUTOVERVOLTAGE 839						/* Input voltage >15V --> 2.2k/ (10k+2.2k)*15 = 2.70492V
+46:                												Now calculate the ADC expected value  = 2.70492/3.3*1023 = 839 */
+47:                extern unsigned int  Buck2ReferenceNew,Buck2ReferenceOld;
+48:                //extern char OnOffFuente;			
+49:                extern tPID Buck2VoltagePID;
+50:                //extern void CompensarRampa(void);
+51:                
+52:                int main(void)
+53:                {
+000524  FA0000     LNK #0x0
+54:                	int InputVoltage;
+55:                	/* Configure Oscillator to operate the device at 40Mhz
+56:                	   Fosc= Fin*M/(N1*N2), Fcy=Fosc/2
+57:                 	   Fosc= 7.37*(43)/(2*2)=80Mhz for Fosc, Fcy = 40Mhz */
+58:                
+59:                	/* Configure PLL prescaler, PLL postscaler, PLL divisor */
+60:                	PLLFBD=41; 				/* M = PLLFBD + 2 */
+000526  200290     MOV #0x29, W0
+000528  883A30     MOV W0, PLLFBD
+61:                	CLKDIVbits.PLLPOST=0;   /* N1 = 2 */
+00052A  803A21     MOV CLKDIV, W1
+00052C  2FF3F0     MOV #0xFF3F, W0
+00052E  608000     AND W1, W0, W0
+000530  883A20     MOV W0, CLKDIV
+62:                	CLKDIVbits.PLLPRE=0;    /* N2 = 2 */
+000532  803A21     MOV CLKDIV, W1
+000534  2FFE00     MOV #0xFFE0, W0
+000536  608000     AND W1, W0, W0
+000538  883A20     MOV W0, CLKDIV
+63:                
+64:                    __builtin_write_OSCCONH(0x01);			/* New Oscillator selection FRC w/ PLL */
+00053A  200012     MOV #0x1, W2
+00053C  200780     MOV #0x78, W0
+00053E  2009A1     MOV #0x9A, W1
+000540  207433     MOV #0x743, W3
+000542  784980     MOV.B W0, [W3]
+000544  784981     MOV.B W1, [W3]
+000546  784982     MOV.B W2, [W3]
+65:                    __builtin_write_OSCCONL(0x01);  		/* Enable Switch */
+000548  200012     MOV #0x1, W2
+00054A  200460     MOV #0x46, W0
+00054C  200571     MOV #0x57, W1
+00054E  207423     MOV #0x742, W3
+000550  784980     MOV.B W0, [W3]
+000552  784981     MOV.B W1, [W3]
+000554  784982     MOV.B W2, [W3]
+66:                      
+67:                	while(OSCCONbits.COSC != 0b001);		/* Wait for Oscillator to switch to FRC w/ PLL */  
+000556  000000     NOP
+000558  803A11     MOV OSCCON, W1
+00055A  270000     MOV #0x7000, W0
+00055C  608080     AND W1, W0, W1
+00055E  210000     MOV #0x1000, W0
+000560  508F80     SUB W1, W0, [W15]
+000562  3AFFFA     BRA NZ, .L2
+68:                    while(OSCCONbits.LOCK != 1);			/* Wait for Pll to Lock */
+000564  000000     NOP
+000566  803A11     MOV OSCCON, W1
+000568  200200     MOV #0x20, W0
+00056A  608000     AND W1, W0, W0
+00056C  E00000     CP0 W0
+00056E  32FFFB     BRA Z, .L3
+69:                
+70:                	/* Now setup the ADC and PWM clock for 120MHz
+71:                	   ((FRC * 16) / APSTSCLR ) = (7.37MHz * 16) / 1 = 117.9MHz*/
+72:                	
+73:                	ACLKCONbits.FRCSEL = 1;					/* FRC provides input for Auxiliary PLL (x16) */
+000570  A8C750     BSET ACLKCON, #6
+74:                	ACLKCONbits.SELACLK = 1;				/* Auxiliary Ocillator provides clock source for PWM & ADC */
+000572  A8A751     BSET 0x751, #5
+75:                	ACLKCONbits.APSTSCLR = 7;				/* Divide Auxiliary clock by 1 */
+000574  803A81     MOV ACLKCON, W1
+000576  207000     MOV #0x700, W0
+000578  700001     IOR W0, W1, W0
+00057A  883A80     MOV W0, ACLKCON
+76:                	ACLKCONbits.ENAPLL = 1;					/* Enable Auxiliary PLL */
+00057C  A8E751     BSET 0x751, #7
+77:                	
+78:                	while(ACLKCONbits.APLLCK != 1);			/* Wait for Auxiliary PLL to Lock */
+00057E  000000     NOP
+000580  803A81     MOV ACLKCON, W1
+000582  240000     MOV #0x4000, W0
+000584  608000     AND W1, W0, W0
+000586  E00000     CP0 W0
+000588  32FFFB     BRA Z, .L4
+79:                   //PTPER = 3155;                         /* PTPER = ((1 / 300kHz) / 1.04ns) = 3155, where 300kHz 
+80:                											/* is the desired switching frequency and 1.04ns is PWM resolution. */
+81:                    PTPER = 9075;                         /* PTPER = ((1 / 100kHz) / 1.04ns) = 9075, where 300kHz 
+00058A  223730     MOV #0x2373, W0
+00058C  882020     MOV W0, PTPER
+82:                											 /*is the desired switching frequency and 1.04ns is PWM resolution. */
+83:                
+84:                /* For the 2nd buck stage Jumpers J12 and J13 must be populated while J14 and J15 are not. */
+85:                
+86:                				
+87:                	Buck2DriveCPC();				    	/* PWM Setup for 3.3V Buck2 */
+00058E  07FEF4     RCALL Buck2DriveCPC
+88:                    CurrentandVoltageMeasurements();		/* ADC Setup for bucks and boost */
+000590  07FF4A     RCALL CurrentandVoltageMeasurements
+89:                	Buck2VoltageLoop();						/* Initialize Buck2 PID */
+000592  07FF6E     RCALL Buck2VoltageLoop
+90:                    Buck2RefVoltValInit();
+000594  07FFAF     RCALL Buck2RefVoltValInit
+91:                
+92:                   
+93:                    PTCONbits.PTEN = 1;						/* Enable the PWM */ 
+000596  A8E401     BSET 0x401, #7
+94:                    ADCONbits.ADON = 1;						/* Enable the ADC */
+000598  A8E301     BSET 0x301, #7
+95:                    Buck2ReferenceRoutine();				/* Initiate Buck 2 soft start to 3.3V */ 
+00059A  07FF8D     RCALL Buck2ReferenceRoutine
+00059C  370001     BRA .L6
+96:                   
+97:                
+98:                    while(1){
+99:                
+100:               if (Buck2ReferenceOld!=Buck2ReferenceNew)
+0005A0  8042E1     MOV Buck2ReferenceOld, W1
+0005A2  8042D0     MOV Buck2ReferenceNew, W0
+0005A4  508F80     SUB W1, W0, [W15]
+0005A6  32FFFB     BRA Z, .L7
+101:               {
+102:               	Buck2ReferenceOld=Buck2ReferenceNew;
+0005A8  8042D0     MOV Buck2ReferenceNew, W0
+0005AA  8842E0     MOV W0, Buck2ReferenceOld
+103:               	Buck2ReferenceRoutine(); //actualiza el valor de la referencia
+0005AC  07FF84     RCALL Buck2ReferenceRoutine
+104:               }			
+105:               /* Initiate Buck 2 soft start to 3.3V */
+106:               
+107:               /*
+108:               	
+109:               					if (ADSTATbits.P2RDY ==1)
+110:               			
+111:               					{
+112:               						InputVoltage = ADCBUF4;						// Read input Voltage 
+113:               						ADSTATbits.P2RDY = 0;						//Clear the ADC pair ready bit 
+114:               						
+115:               					}
+116:               	
+117:               	
+118:               					if ((InputVoltage <= INPUTUNDERVOLTAGE) || (InputVoltage >= INPUTOVERVOLTAGE))  if input voltage is less than 
+119:               																				    		underVoltage or greater than over 
+120:               																							voltage limitshut down all PWM output 
+121:               
+122:               					{
+123:               						
+124:               						IOCON2bits.OVRENH = 1;							// Over ride the PWM2H to inactive state 
+125:               						IOCON2bits.OVRENL = 1;							// Over ride the PWM2L to inactive state 
+126:               						
+127:               					}
+128:               */
+129:               			
+130:               
+131:               }
+00059E  000000     NOP
+0005AE  37FFF8     BRA .L6
+132:               		
+133:               }			
+134:               					
+135:               
+136:               
+---  C:/Users/peiog/MPLABXProjects/FB_Q3_12_CPC/isr_asm_FB_Q3_12_CPC.s  ---------------------------------
+                                                  1:     ; ******************************************************************************
+                                                  2:     ; * © 2008 Microchip Technology Inc.
+                                                  3:     ; *
+                                                  4:     ; SOFTWARE LICENSE AGREEMENT:
+                                                  5:     ; Microchip Technology Incorporated ("Microchip") retains all ownership and 
+                                                  6:     ; intellectual property rights in the code accompanying this message and in all 
+                                                  7:     ; derivatives hereto.  You may use this code, and any derivatives created by 
+                                                  8:     ; any person or entity by or on your behalf, exclusively with Microchip's
+                                                  9:     ; proprietary products.  Your acceptance and/or use of this code constitutes 
+                                                  10:    ; agreement to the terms and conditions of this notice.
+                                                  11:    ;
+                                                  12:    ; CODE ACCOMPANYING THIS MESSAGE IS SUPPLIED BY MICROCHIP "AS IS".  NO 
+                                                  13:    ; WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+                                                  14:    ; TO, IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A 
+                                                  15:    ; PARTICULAR PURPOSE APPLY TO THIS CODE, ITS INTERACTION WITH MICROCHIP'S 
+                                                  16:    ; PRODUCTS, COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+                                                  17:    ;
+                                                  18:    ; YOU ACKNOWLEDGE AND AGREE THAT, IN NO EVENT, SHALL MICROCHIP BE LIABLE, WHETHER 
+                                                  19:    ; IN CONTRACT, WARRANTY, TORT (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), 
+                                                  20:    ; STRICT LIABILITY, INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, 
+                                                  21:    ; PUNITIVE, EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF 
+                                                  22:    ; ANY KIND WHATSOEVER RELATED TO THE CODE, HOWSOEVER CAUSED, EVEN IF MICROCHIP HAS BEEN 
+                                                  23:    ; ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
+                                                  24:    ; ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY RELATED TO 
+                                                  25:    ; THIS CODE, SHALL NOT EXCEED THE PRICE YOU PAID DIRECTLY TO MICROCHIP SPECIFICALLY TO 
+                                                  26:    ; HAVE THIS CODE DEVELOPED.
+                                                  27:    ;
+                                                  28:    ; You agree that you are solely responsible for testing the code and 
+                                                  29:    ; determining its suitability.  Microchip has no obligation to modify, test, 
+                                                  30:    ; certify, or support the code.
+                                                  31:    ;
+                                                  32:    ; *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                  33:    
+                                                  34:    .equ __33FJ16GS502, 1
+                                                  35:    .include "p33FJ16GS502.inc"
+                                                  36:    .include  "dspcommon.inc"         ; fractsetup
+                                                  37:    
+                                                  38:    ; Buck 2 Maximum Current 3A ==>3/60*20=1V=>1V*1023/1,65=620 MaxCMPDAC=0x16C
+                                                  39:    .equ MaxCMPDAC, 0X200
+                                                  40:    ; Buck 2 Minimum Duty cycle for minimum dutyvoltage mode control
+                                                  41:    ;Buck 2 Minimum Current 0,33A ==>0,33/60*20=0,11V=>0,11V*1024/1,65=68 MinCMPDAC=0x48
+                                                  42:    .equ MinCMPDAC, 0X48 
+                                                  43:    
+                                                  44:    .equ    offsetabcCoefficients, 0
+                                                  45:    .equ    offsetcontrolHistory, 2
+                                                  46:    .equ    offsetcontrolOutput, 4
+                                                  47:    .equ    offsetmeasuredOutput, 6
+                                                  48:    .equ    offsetcontrolReference, 8
+                                                  49:    ;.equ 	offsetcorriente_in,10
+                                                  50:    ;.equ  	offsetFactorComp,12
+                                                  51:    
+                                                  52:    
+                                                  53:    
+                                                  54:    .text
+                                                  55:    ; a partir de aqui a la memoria de programa
+                                                  56:    
+                                                  57:    
+                                                  58:    .global __ADCP0Interrupt
+                                                  59:    
+                                                  60:    __ADCP0Interrupt:
+0005B0  781F80     MOV W0, [W15++]                61:        push w0
+0005B2  781F81     MOV W1, [W15++]                62:        push w1 
+0005B4  781F82     MOV W2, [W15++]                63:        push w2  
+                                                  64:    
+0005B6  208500     MOV #0x850, W0                 65:        mov #_Buck2VoltagePID, w0			
+                                                  66:        ;mov #617, w1 ;PARA PROBAR 
+0005B8  801911     MOV ADCBUF1, W1                67:    	mov ADCBUF1, w1
+0005BA  DD08C2     SL W1, #2, W1                  68:        sl  w1, #2, w1 ;escalado en 2 bits hacia la izquierda para adecuarlo a 12 bits de
+                                                  69:    		  ;de Q3.12
+                                                  70:    
+0005BC  980031     MOV W1, [W0+6]                 71:        mov w1, [w0+#offsetmeasuredOutput]
+0005BE  020318     CALL 0x318                     72:        call _PIDBUCK2 						; Call PIDBUCK2 routine
+                                                  73:         ; return from PIDBUCK2 routine with the updated control voltage
+0005C2  900120     MOV [W0+4], W2                 74:        mov.w [w0+#offsetcontrolOutput], w2 ; Clamp PID output to allowed limits
+0005C4  DE90C5     ASR W2, #5, W1                 75:       asr w2, #5, w1 	;escalado de 5 bits a la derecha para ajustar
+                                                  76:    			;16bit(32767) a 10bit del DA del CMPDAC 
+0005C6  200480     MOV #0x48, W0                  77:        mov.w #MinCMPDAC, w0 ;saturate to minimum current
+0005C8  E60800     CPSGT.W W1, W0                 78:    	cpsgt w1, w0
+0005CA  780080     MOV W0, W1                     79:        	mov.w w0, w1
+0005CC  202000     MOV #0x200, W0                 80:        mov.w #MaxCMPDAC, w0	; saturate to maximum current
+0005CE  E60001     CPSGT.W W0, W1                 81:    	cpsgt w0, w1
+0005D0  780080     MOV W0, W1                     82:    	mov.w w0, w1
+                                                  83:    	;mov #0x150,w1             ;INSTRUCCION EXTRA PARA ANULAR EL CONTROL EN MODO CORRIENTE Y CARGAR UN VALOR FIJO
+0005D2  882A11     MOV W1, CMPDAC1                84:    	mov w1, CMPDAC1		  ;Update compator register to compare peak current with voltage value
+                                                  85:    				  ;Máximo número 3FF =1023 DA de 10bits
+0005D4  A90306     BCLR ADSTAT, #0                86:    bclr ADSTAT,	#0	; Clear Pair 0 conversion status bit
+0005D6  A9C091     BCLR 0x91, #6                  87:    bclr IFS6, #14	; Clear Pair 0 Interrupt Flag
+                                                  88:    
+                                                  89:    
+0005D8  78014F     MOV [--W15], W2                90:    pop w2
+0005DA  7800CF     MOV [--W15], W1                91:    pop w1
+0005DC  78004F     MOV [--W15], W0                92:    pop w0
+0005DE  FE8000     POP.S                          93:    pop.s
+                                                  94:    
+0005E0  064000     RETFIE                         95:    retfie
+                                                  96:    .end
+---  C:/Users/peiog/MPLABXProjects/FB_Q3_12_CPC/isr_FB_Q3_12_CPC.c  -------------------------------------
+1:                 /**********************************************************************
+2:                 * © 2008 Microchip Technology Inc.
+3:                 *
+4:                 * SOFTWARE LICENSE AGREEMENT:
+5:                 * Microchip Technology Incorporated ("Microchip") retains all ownership and 
+6:                 * intellectual property rights in the code accompanying this message and in all 
+7:                 * derivatives hereto.  You may use this code, and any derivatives created by 
+8:                 * any person or entity by or on your behalf, exclusively with Microchip's
+9:                 * proprietary products.  Your acceptance and/or use of this code constitutes 
+10:                * agreement to the terms and conditions of this notice.
+11:                *
+12:                * CODE ACCOMPANYING THIS MESSAGE IS SUPPLIED BY MICROCHIP "AS IS".  NO 
+13:                * WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+14:                * TO, IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A 
+15:                * PARTICULAR PURPOSE APPLY TO THIS CODE, ITS INTERACTION WITH MICROCHIP'S 
+16:                * PRODUCTS, COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+17:                *
+18:                * YOU ACKNOWLEDGE AND AGREE THAT, IN NO EVENT, SHALL MICROCHIP BE LIABLE, WHETHER 
+19:                * IN CONTRACT, WARRANTY, TORT (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), 
+20:                * STRICT LIABILITY, INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, 
+21:                * PUNITIVE, EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF 
+22:                * ANY KIND WHATSOEVER RELATED TO THE CODE, HOWSOEVER CAUSED, EVEN IF MICROCHIP HAS BEEN 
+23:                * ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
+24:                * ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY RELATED TO 
+25:                * THIS CODE, SHALL NOT EXCEED THE PRICE YOU PAID DIRECTLY TO MICROCHIP SPECIFICALLY TO 
+26:                * HAVE THIS CODE DEVELOPED.
+27:                *
+28:                * You agree that you are solely responsible for testing the code and 
+29:                * determining its suitability.  Microchip has no obligation to modify, test, 
+30:                * certify, or support the code.
+31:                *
+32:                *******************************************************************************/
+33:                
+34:                #include "p33FJ16GS502.h"
+35:                #include "dsp.h"
+36:                
+37:                unsigned int TimerInterruptCount = 0; 
+38:                //extern tPID Buck2VoltagePID;
+39:                extern unsigned int Buck2ReferenceNew;
+40:                void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt()
+41:                {
+0002C8  781F80     MOV W0, [W15++]
+0002CA  FA0000     LNK #0x0
+42:                  TimerInterruptCount ++; 	/* Increment interrupt counter */
+0002CC  804340     MOV TimerInterruptCount, W0
+0002CE  E80000     INC W0, W0
+0002D0  884340     MOV W0, TimerInterruptCount
+43:                  IFS0bits.T1IF = 0; 		/* Clear Interrupt Flag */
+0002D2  A96084     BCLR IFS0, #3
+44:                }
+0002D4  FA8000     ULNK
+0002D6  78004F     MOV [--W15], W0
+0002D8  064000     RETFIE
+45:                void  __attribute__((__interrupt__, no_auto_psv)) _CNInterrupt()
+46:                {
+0002DA  781F80     MOV W0, [W15++]
+0002DC  FA0002     LNK #0x2
+47:                int VPotRefence;
+48:                while (ADSTATbits.P2RDY ==0);
+0002DE  000000     NOP
+0002E0  801830     MOV ADSTAT, W0
+0002E2  600064     AND W0, #0x4, W0
+0002E4  E00000     CP0 W0
+0002E6  32FFFC     BRA Z, .L3
+49:                VPotRefence=ADCBUF5;
+0002E8  801950     MOV ADCBUF5, W0
+0002EA  780F00     MOV W0, [W14]
+50:                //Buck2ReferenceNew=VPotRefence<<5; Q0.15
+51:                Buck2ReferenceNew=VPotRefence<<2; //Q3.12 ajuste al decimal
+0002EC  78001E     MOV [W14], W0
+0002EE  DD0042     SL W0, #2, W0
+0002F0  8842D0     MOV W0, Buck2ReferenceNew
+52:                //Buck2VoltagePID.controlReference=VPotRefence;
+53:                
+54:                IFS1bits.CNIF=0; 	//Habilita interrupcon de sw1
+0002F2  A96086     BCLR IFS1, #3
+55:                }
+0002F4  FA8000     ULNK
+0002F6  78004F     MOV [--W15], W0
+0002F8  064000     RETFIE
+---  C:/Users/peiog/MPLABXProjects/FB_Q3_12_CPC/init_FB_Q3_12_CPC.c  ------------------------------------
+1:                 /**********************************************************************
+2:                 * © 2008 Microchip Technology Inc.
+3:                 *
+4:                 * SOFTWARE LICENSE AGREEMENT:
+5:                 * Microchip Technology Incorporated ("Microchip") retains all ownership and 
+6:                 * intellectual property rights in the code accompanying this message and in all 
+7:                 * derivatives hereto.  You may use this code, and any derivatives created by 
+8:                 * any person or entity by or on your behalf, exclusively with Microchip's
+9:                 * proprietary products.  Your acceptance and/or use of this code constitutes 
+10:                * agreement to the terms and conditions of this notice.
+11:                *
+12:                * CODE ACCOMPANYING THIS MESSAGE IS SUPPLIED BY MICROCHIP "AS IS".  NO 
+13:                * WARRANTIES, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED 
+14:                * TO, IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A 
+15:                * PARTICULAR PURPOSE APPLY TO THIS CODE, ITS INTERACTION WITH MICROCHIP'S 
+16:                * PRODUCTS, COMBINATION WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+17:                *
+18:                * YOU ACKNOWLEDGE AND AGREE THAT, IN NO EVENT, SHALL MICROCHIP BE LIABLE, WHETHER 
+19:                * IN CONTRACT, WARRANTY, TORT (INCLUDING NEGLIGENCE OR BREACH OF STATUTORY DUTY), 
+20:                * STRICT LIABILITY, INDEMNITY, CONTRIBUTION, OR OTHERWISE, FOR ANY INDIRECT, SPECIAL, 
+21:                * PUNITIVE, EXEMPLARY, INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, FOR COST OR EXPENSE OF 
+22:                * ANY KIND WHATSOEVER RELATED TO THE CODE, HOWSOEVER CAUSED, EVEN IF MICROCHIP HAS BEEN 
+23:                * ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE FULLEST EXTENT 
+24:                * ALLOWABLE BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS IN ANY WAY RELATED TO 
+25:                * THIS CODE, SHALL NOT EXCEED THE PRICE YOU PAID DIRECTLY TO MICROCHIP SPECIFICALLY TO 
+26:                * HAVE THIS CODE DEVELOPED.
+27:                *
+28:                * You agree that you are solely responsible for testing the code and 
+29:                * determining its suitability.  Microchip has no obligation to modify, test, 
+30:                * certify, or support the code.
+31:                *
+32:                *******************************************************************************/
+33:                
+34:                #include "p33FJ16GS502.h"
+35:                #include "dsp.h"
+36:                #include "Functions.h"
+37:                /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+38:                /* ~~~~~~~~~~~~~~~~~~~~~~  PID Variable Definitions  ~~~~~~~~~~~~~~~~~~~~~~~ */
+39:                
+40:                /* Variable Declaration required for each PID controller in the application. */
+41:                void PIDInitBoost(fractional *);
+42:                tPID Buck2VoltagePID;
+43:                
+44:                
+45:                
+46:                
+47:                
+48:                /* These data structures contain a pointer to derived coefficients in X-space and 
+49:                   pointer to controler state (history) samples in Y-space. So declare variables 
+50:                   for the derived coefficients and the controller history samples */
+51:                
+52:                /*1) C attributes, designated by the __attribute__ keyword, provide a *
+53:                * means to specify various characteristics of a variable or *
+54:                * function, such as where a particular variable should be placed *
+55:                * in memory, whether the variable should be aligned to a certain *
+56:                * address boundary, whether a function is an Interrupt Service *
+57:                * Routine (ISR), etc. If no special characteristics need to be *
+58:                * specified for a variable or function, then attributes are not *
+59:                * required. For more information about attributes, refer to the *
+60:                * C30 User's Guide. *
+61:                * *
+62:                * 2) The __section__(".xbss") and __section__(".ybss") attributes are *
+63:                * used to place a variable in X data space and Y data space, *
+64:                * respectively. Variables accessed by dual-source DSP instructions *
+65:                * must be defined using these attributes.
+66:                * 3) The aligned(k) attribute, used in variable definitions, is used *
+67:                * to align a variable to the nearest higher 'k'-byte address *
+68:                * boundary. 'k' must be substituted with a suitable constant *
+69:                * number when the ModBuf_X(k) or ModBuf_Y(k) macro is invoked. *
+70:                * In most cases, variables are aligned either to avoid potential *
+71:                * misaligned memory accesses, or to configure a modulo buffer. *
+72:                * *
+73:                * 4) The __interrupt__ attribute is used to qualify a function as an *
+74:                * interrupt service routine. An interrupt routine can be further *
+75:                * configured to save certain variables on the stack, using the *
+76:                * __save__(var-list) directive. *
+77:                * *
+78:                * 5) The __shadow__ attribute is used to set up any function to *
+79:                * perform a fast context save using shadow registers. *
+80:                * *
+81:                * 6) Note the use of double-underscores (__) at the start and end of *
+82:                * all the keywords mentioned above. *
+83:                * *
+84:                **********************************************************************/
+85:                
+86:                
+87:                
+88:                /*reserva de memoria en zona x, donde se ubicaran los coeficientes de la fdt*/
+89:                fractional Buck2VoltageABC[5] __attribute__ ((section (".xbss, bss, xmemory")));
+90:                /*reserva de memoria en zona y, donde se ubicaran error y d actual y anteriores*/
+91:                fractional Buck2VoltageHistory[5] __attribute__ ((section (".ybss, bss, ymemory")));
+92:                /*el tamaño depende del tipo de regulador a implementar, en este caso tipo3*/
+93:                
+94:                
+95:                
+96:                /*coeficientes del denominador de la FDT,
+97:                 en formato Q3.12 expresada en decimal 
+98:                 (parte entera+fracción) con signo cambiado*/
+99:                
+100:               #define PID_BUCK2_A2 -3923  //En Q3.12 -2^3+...+=-0.9638_>binario 11111100010010000
+101:                                           //este binario como 2'compl a decimal -3948
+102:               #define PID_BUCK2_A1 8020  //1.983
+103:               //coeficientes del numerador de la FDT, parte entera+decimal enn Q3.12
+104:               #define PID_BUCK2_B0 1628 //En Q3.12=2.643
+105:               #define PID_BUCK2_B1 16 //En Q3.12=0.04485
+106:               #define PID_BUCK2_B2 -1612
+107:               /*
+108:               #define PID_BUCK2_A2 -3948  //En Q3.12 -2^3+...+=-0.9638_>binario 11111100010010000
+109:                                           //este binario como 2'compl a decimal -1904
+110:               #define PID_BUCK2_A1 8045  //1.465 
+111:               //coeficientes del numerador de la FDT, parte entera+decimal enn Q3.12
+112:               #define PID_BUCK2_B0 13681 //En Q3.12=2.643
+113:               #define PID_BUCK2_B1 126 //En Q3.12=0.04485
+114:               #define PID_BUCK2_B2 -13554 */
+115:               /*
+116:               // fc=1000
+117:                0.3975 z^2 + 0.00395 z - 0.3935
+118:                 -------------------------------
+119:                     z^2 - 1.958 z + 0.9578
+120:               */
+121:               
+122:               #define ACMP1 0b100111                                  /*ACMP1 asociado a pin 2 current sense*/
+123:               #define PID_BUCK2_VOLTAGE_REFERENCE 0x5A4				/* Reference voltage is from resistor divider circuit R29 & R30
+124:               													    	Voltage FB2 = (5kOhm / (5kOhm + 3.3kOhm)) * 3.3V = 1.988V
+125:               														    Now calculate expected ADC value (1.988V * 1024)/3.3V = 617 
+126:               															Then left shift by 2 for Q3_12 format (617 * 4) = 2468 = 0x9A4 */
+127:               																	  
+128:               #define PID_BUCK2_VOLTAGE_REF_MIN 	  0x90			/* Minimum reference voltage is total dead time (72) left shifted by 2 bits*/
+129:               
+130:               /* This is increment rate to give us desired PID_BUCK1VOLTAGE_REFERENCE. The sofstart takes 50ms */
+131:                #define BUCK2_SOFTSTART_INCREMENT	 (PID_BUCK2_VOLTAGE_REFERENCE  / 50 )
+132:               
+133:               /*referencia1=3.3v, del sensor (divisor de tension)*/
+134:               /*5/(5+3.3)*3.3=1.988v--->(1.988*1024)/3.3v=617*/
+135:               /*ADCres=10, Q15res=15--->617*32=19744 = 0x4D20*/
+136:               
+137:               
+138:               /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+139:               extern unsigned int TimerInterruptCount;
+140:               
+141:               unsigned int Buck2ReferenceNew,Buck2ReferenceOld ;
+142:               
+143:               void Buck2DriveCPC(void)
+144:               {
+000378  FA0000     LNK #0x0
+145:               //comparator configuration para control pico de corriente
+146:               CMPCON1=0x8001; 
+00037A  280010     MOV #0x8001, W0
+00037C  882A00     MOV W0, CMPCON1
+147:               //CMPON ? CMPSIDL ? ? ? ? DACOE INSEL1 INSEL0 EXTREF ? CMPSTAT ? CMPPOL RANGE
+148:               //  1   0    0    0 0 0 0   0     0      0      0     0   0     0   0     1 
+149:               //INSEL1 INSEL0
+150:               // 0        0  LA ENTRADA ISENSE ES EL PIN 0=> CMP1A=comparador 1 A (pin2)
+151:               //En U-0 idle  hyst flter  X   X  CMP1
+152:               // PTCON: PWM Time Base Control Register PWM no habilitado
+153:               PTCONbits.PTEN = 0;	
+00037E  A9E401     BCLR 0x401, #7
+154:               // PTCON2: PWM Clock Divider Select Register
+155:               PTCON2 = 0;	//Divide by 1, maximum PWM timing resolution
+000380  EF2402     CLR PTCON2
+156:               
+157:               	
+158:                   /* FlyBack converter setup to output 3.3V */ 
+159:               
+160:                   IOCON2bits.PENH = 1;               	/* PWM2H is controlled by PWM module */
+000382  A8E443     BSET 0x443, #7
+161:                   IOCON2bits.PENL = 1;                /* PWM2L is controlled by PWM module */
+000384  A8C443     BSET 0x443, #6
+162:                   IOCON2bits.PMOD = 0;                /* Complementary Output mode*/
+000386  802211     MOV IOCON2, W1
+000388  2F3FF0     MOV #0xF3FF, W0
+00038A  608000     AND W1, W0, W0
+00038C  882210     MOV W0, IOCON2
+163:                   IOCON2bits.POLH = 1;                /* Drive signals are active-low */
+00038E  A8A443     BSET 0x443, #5
+164:                   IOCON2bits.POLL = 0;                /* Drive signals are active-high */
+000390  A98443     BCLR 0x443, #4
+165:                   IOCON2bits.OVRENH = 0;				/* Disable Override feature for shutdown PWM */  
+000392  A92443     BCLR 0x443, #1
+166:                   IOCON2bits.OVRENL = 0;				/* Disable Override feature for shutdown PWM */
+000394  A90443     BCLR 0x443, #0
+167:                   //IOCON2bits.OVRDAT = 0b00;			/* Shut down PWM with Over ride 0 on PWMH and PWML */	
+168:                   IOCON2bits.FLTDAT = 0b11;			/* As IFLTMOD=0 when fault is active 2H = high; 2L = high
+000396  802211     MOV IOCON2, W1
+000398  200300     MOV #0x30, W0
+00039A  700001     IOR W0, W1, W0
+00039C  882210     MOV W0, IOCON2
+169:                                                         PWML alta en falta para resetear el Cap de la rampa*/
+170:                                                       /*El driver TCA428A invierte PWM2H y no invierte PWM2L*/
+171:                   DTR2    = 0x60;                	  	/* DTR = (100ns / 1.04ns), where desired dead time is 25ns. 
+00039E  200600     MOV #0x60, W0
+0003A0  882250     MOV W0, DTR2
+172:               									     Mask upper two bits since DTR<13:0> */
+173:                   ALTDTR2 = 0x60;            		  	/* ALTDTR = (50ns / 1.04ns), where desired dead time is 50ns. 
+0003A2  200600     MOV #0x60, W0
+0003A4  882260     MOV W0, ALTDTR2
+174:               									     Mask upper two bits since ALTDTR<13:0> */        
+175:                   PWMCON2bits.FLTIEN=1;               /*Fault interrupt is enabled*/
+0003A6  A88441     BSET 0x441, #4
+176:                   PWMCON2bits.ITB = 0;                /* PTPER based period Select Primary Timebase mode */
+0003A8  A92441     BCLR 0x441, #1
+177:                   PWMCON2bits.MDCS = 0;               /*duty cycle lo pone cada PDC*/	       
+0003AA  A90441     BCLR 0x441, #0
+178:                   PWMCON2bits.DTC = 0; 
+0003AC  802201     MOV PWMCON2, W1
+0003AE  2FF3F0     MOV #0xFF3F, W0
+0003B0  608000     AND W1, W0, W0
+0003B2  882200     MOV W0, PWMCON2
+179:                   PWMCON2bits.IUE = 1;                /* Enable Immediate duty cycle updates */
+0003B4  A80440     BSET PWMCON2, #0
+180:                   
+181:                   RPINR29bits.FLT1R = 33; 		//Assign PWM Fault Input 1 (FLT1) to the RP33 Pin 
+0003B6  8035D1     MOV RPINR29, W1
+0003B8  2C0FF0     MOV #0xC0FF, W0
+0003BA  608080     AND W1, W0, W1
+0003BC  221000     MOV #0x2100, W0
+0003BE  700001     IOR W0, W1, W0
+0003C0  8835D0     MOV W0, RPINR29
+182:                   //RPOR16bits.RP33R = 0b100111; 	/* Analog Comparator Output 1 is Assigned to RP33 Output Pin*/
+183:                   RPOR16bits.RP33R =ACMP1;
+0003C2  803781     MOV RPOR16, W1
+0003C4  2C0FF0     MOV #0xC0FF, W0
+0003C6  608080     AND W1, W0, W1
+0003C8  227000     MOV #0x2700, W0
+0003CA  700001     IOR W0, W1, W0
+0003CC  883780     MOV W0, RPOR16
+184:                   LEBCON2bits.PHR = 1; 			/* Rising edge of PWMxH will trigger LEB counter */
+0003CE  A8E45B     BSET 0x45B, #7
+185:               	LEBCON2bits.PHF = 1; 			/* Falling edge of PWMxH is ignored by LEB counter */
+0003D0  A8C45B     BSET 0x45B, #6
+186:               	LEBCON2bits.FLTLEBEN = 1; 		/* Enable fault LEB for selected source */
+0003D2  A8645B     BSET 0x45B, #3
+187:               	LEBCON2bits.CLLEBEN = 0; 		/* Disable current-limit LEB for selected source */
+0003D4  A9445B     BCLR 0x45B, #2
+188:               	LEBCON2bits.LEB = 30; 			/* Blanking period of 8.32*30=249,6ns */
+0003D6  8022D1     MOV LEBCON2, W1
+0003D8  2FC070     MOV #0xFC07, W0
+0003DA  608080     AND W1, W0, W1
+0003DC  200F00     MOV #0xF0, W0
+0003DE  700001     IOR W0, W1, W0
+0003E0  8822D0     MOV W0, LEBCON2
+189:                   
+190:                   FCLCON2bits.IFLTMOD=0;          /*Normal Fault mode*/
+0003E2  A9E445     BCLR 0x445, #7
+191:                   FCLCON2bits.CLMOD = 0;	        /* Current-limit function is disabled */
+0003E4  A90445     BCLR 0x445, #0
+192:                   FCLCON2bits.FLTPOL = 0;			/* fault source is active high*/
+0003E6  A94444     BCLR FCLCON2, #2
+193:                   FCLCON2bits.FLTSRC = 0;	 		/*Fault 1 Selected for PWM Generator 2 Control Signal Source*/
+0003E8  802221     MOV FCLCON2, W1
+0003EA  2FF070     MOV #0xFF07, W0
+0003EC  608000     AND W1, W0, W0
+0003EE  882220     MOV W0, FCLCON2
+194:                   FCLCON2bits.FLTMOD = 1; 		/* Fault cycle by cycle */   
+0003F0  802221     MOV FCLCON2, W1
+0003F2  2FFFC0     MOV #0xFFFC, W0
+0003F4  608000     AND W1, W0, W0
+0003F6  A00000     BSET W0, #0
+0003F8  882220     MOV W0, FCLCON2
+195:                   TRGCON2bits.TRGDIV = 0;         /* Trigger interrupt generated every PWM cycle ¿1 EN VEZ DE 0?*/
+0003FA  8022A1     MOV TRGCON2, W1
+0003FC  20FFF0     MOV #0xFFF, W0
+0003FE  608000     AND W1, W0, W0
+000400  8822A0     MOV W0, TRGCON2
+196:                   TRGCON2bits.TRGSTRT = 0;        /* Trigger generated inmediatly*/    
+000402  8022A1     MOV TRGCON2, W1
+000404  2FFC00     MOV #0xFFC0, W0
+000406  608000     AND W1, W0, W0
+000408  8822A0     MOV W0, TRGCON2
+197:               	PDC2 =0x800;                        /*0x6C0 Dmax=0,5                                   
+00040A  208000     MOV #0x800, W0
+00040C  882230     MOV W0, PDC2
+198:                  //PDC2 = ( PWM_PERIOD*0.9 );      /* Initial pulse-width = minimum deadtime required (DTR2 + ALDTR2)*/
+199:                   TRIG2 = 100;		             /* Trigger generated almost at beginning of PWM active period */  
+00040E  200640     MOV #0x64, W0
+000410  882290     MOV W0, TRIG2
+200:                   
+201:                   /*Inicializa el Timer1 para los delays*/
+202:                   PR1 = 0x9C40;						//(1ms / 25ns) = 40,000 = 0x9C40 
+000412  29C400     MOV #0x9C40, W0
+000414  880810     MOV W0, PR1
+203:               IPC0bits.T1IP = 4;				 	//Set Interrupt Priority lower then ADC
+000416  800521     MOV IPC0, W1
+000418  28FFF0     MOV #0x8FFF, W0
+00041A  608000     AND W1, W0, W0
+00041C  A0E000     BSET W0, #14
+00041E  880520     MOV W0, IPC0
+204:               IEC0bits.T1IE = 1;					//Enable Timer1 interrupts 
+000420  A86094     BSET IEC0, #3
+205:               /*Fin de inicializacion del Timer1*/
+206:                  // TRISBbits.TRISB13=0; 	/*salida digital PIN 23 PWM1L*/ 
+207:                                           //AHORA PIN2H&PWM2L PERO TRIS NO HACE FALTA, vale con IOCON2bits.PENH&PENL 
+208:               	//TRISBbits.TRISB14=0 ;  /*salida digital PIN 24 PWM1H*/  //AHORA PIN24 PWM2H                                
+209:               }
+000422  FA8000     ULNK
+000424  060000     RETURN
+210:               
+211:               
+212:               
+213:               
+214:               void CurrentandVoltageMeasurements(void)
+215:               {
+000426  FA0000     LNK #0x0
+216:                   ADCONbits.FORM = 0;                   /* Integer data format */
+000428  A90301     BCLR 0x301, #0
+217:                   ADCONbits.EIE = 0;                    /* Early Interrupt disabled */
+00042A  A9E300     BCLR ADCON, #7
+218:                   ADCONbits.ORDER = 1;                  /* Convert odd channel first */
+00042C  A8C300     BSET ADCON, #6
+219:                   ADCONbits.SEQSAMP = 0;                /* Select simultaneous sampling */
+00042E  A9A300     BCLR ADCON, #5
+220:                   ADCONbits.ADCS = 2;                   /* ADC clock = FADC/6 = 120MHz / 6 = 20MHz, 
+000430  801801     MOV ADCON, W1
+000432  2FFF80     MOV #0xFFF8, W0
+000434  608000     AND W1, W0, W0
+000436  A01000     BSET W0, #1
+000438  881800     MOV W0, ADCON
+221:               											12*Tad = 1.6 MSPS, two SARs = 3.2 MSPS */
+222:               
+223:                   IEC6bits.ADCP0IE = 1;				  /* Enable the ADC Pair 0 interrupt*/
+00043A  A8C0A1     BSET 0xA1, #6
+224:                   IFS6bits.ADCP0IF = 0;		    	  /* Clear ADC interrupt flag */ 
+00043C  A9C091     BCLR 0x91, #6
+225:                   IPC27bits.ADCP0IP = 5;			      /* Set ADC interrupt priority */ 
+00043E  8006D1     MOV IPC27, W1
+000440  2F8FF0     MOV #0xF8FF, W0
+000442  608080     AND W1, W0, W1
+000444  205000     MOV #0x500, W0
+000446  700001     IOR W0, W1, W0
+000448  8806D0     MOV W0, IPC27
+226:               		
+227:                 
+228:               	ADPCFGbits.PCFG0 = 0; 			  	  /* PinConCFigAnalog Current Measurement for Buck 2 */ 
+00044A  A90302     BCLR ADPCFG, #0
+229:                   ADPCFGbits.PCFG1 = 0; 				  /* PinConCFigAnalog Voltage Measurement for Buck 2 */
+00044C  A92302     BCLR ADPCFG, #1
+230:               
+231:                   ADPCFGbits.PCFG4 = 0; 				  /* PinConCFigAnalog Voltage Measurement for input voltage source */	
+00044E  A98302     BCLR ADPCFG, #4
+232:                   
+233:               
+234:                
+235:                   ADSTATbits.P0RDY = 0; 				  /* Clear Pair 0, AN0&AN1, data ready bit */
+000450  A90306     BCLR ADSTAT, #0
+236:                   ADCPC0bits.IRQEN0 = 1;                /* Enable ADC Interrupt for Buck 2 control loop: current&voltage */
+000452  A8E30A     BSET ADCPC0, #7
+237:                   ADCPC0bits.TRGSRC0 = 5; 			  /* ADC Pair 0 triggered by PWM Generator 2 ¿1? primary trigger */
+000454  801851     MOV ADCPC0, W1
+000456  2FFE00     MOV #0xFFE0, W0
+000458  608000     AND W1, W0, W0
+00045A  B30050     IOR #0x5, W0
+00045C  881850     MOV W0, ADCPC0
+238:               
+239:                   /*lo que se entiende de las hojas es para PWM generator 2 ADCPC0bits.TRGSRC1 = 5 ¿?*/
+240:               
+241:                   ADSTATbits.P2RDY = 0; 				  /* Clear Pair 2 data ready bit */
+00045E  A94306     BCLR ADSTAT, #2
+242:                   ADCPC1bits.IRQEN2 = 0;                /* Enable ADC Interrupt for input voltage measurement */
+000460  A9E30C     BCLR ADCPC1, #7
+243:                   ADCPC1bits.TRGSRC2 = 5; 			 /* ADC Pair 2 triggered by PWM Generator 2 ¿1 con trgsrc1=4? primary trigger */
+000462  801861     MOV ADCPC1, W1
+000464  2FFE00     MOV #0xFFE0, W0
+000466  608000     AND W1, W0, W0
+000468  B30050     IOR #0x5, W0
+00046A  881860     MOV W0, ADCPC1
+244:               
+245:                	
+246:               }
+00046C  FA8000     ULNK
+00046E  060000     RETURN
+247:               
+248:               
+249:               void Buck2VoltageLoop()
+250:               {
+000470  FA0000     LNK #0x0
+251:                   Buck2VoltagePID.abcCoefficients = Buck2VoltageABC;     /* Set up pointer to derived coefficients */
+000472  2085E0     MOV #0x85E, W0
+000474  884280     MOV W0, Buck2VoltagePID
+252:                   Buck2VoltagePID.controlHistory = Buck2VoltageHistory;  /* Set up pointer to controller history samples */
+000476  20C000     MOV #0xC00, W0
+000478  884290     MOV W0, 0x852
+253:                   
+254:                     PIDInitBuck2(&Buck2VoltagePID);    /*pone todas las variables de error y anteriores de control a cero*/                        
+00047A  208500     MOV #0x850, W0
+00047C  07FF40     RCALL _PIDInitBuck2
+255:               
+256:               
+257:               /* se llama a funcion pidinit, se le pasan las zonas de memoria x e y para inicializarlas 
+258:               if (
+259:               (PID_BUCK2_B0 == 0x7FFF || PID_BUCK2_B0 == 0x8000) ||
+260:               (PID_BUCK2_B1 == 0x7FFF || PID_BUCK2_B1 == 0x8000))
+261:               {
+262:               while(1); //comprobacion de coeficientes en q15, si alguno es q15 entra en bucle infinito 
+263:               } 
+264:               */
+265:                   /* ubica los coeficientes en sus posiciones de memoria */
+266:               
+267:               Buck2VoltagePID.abcCoefficients[0] = PID_BUCK2_B0;
+00047E  804280     MOV Buck2VoltagePID, W0
+000480  2065C1     MOV #0x65C, W1
+000482  780801     MOV W1, [W0]
+268:               Buck2VoltagePID.abcCoefficients[1] = PID_BUCK2_B1;
+000484  804280     MOV Buck2VoltagePID, W0
+000486  E88000     INC2 W0, W0
+000488  200101     MOV #0x10, W1
+00048A  780801     MOV W1, [W0]
+269:               Buck2VoltagePID.abcCoefficients[2] = PID_BUCK2_B2;
+00048C  804280     MOV Buck2VoltagePID, W0
+00048E  400064     ADD W0, #0x4, W0
+000490  2F9B41     MOV #0xF9B4, W1
+000492  780801     MOV W1, [W0]
+270:               Buck2VoltagePID.abcCoefficients[3] = PID_BUCK2_A1;
+000494  804280     MOV Buck2VoltagePID, W0
+000496  400066     ADD W0, #0x6, W0
+000498  21F541     MOV #0x1F54, W1
+00049A  780801     MOV W1, [W0]
+271:               Buck2VoltagePID.abcCoefficients[4] = PID_BUCK2_A2;
+00049C  804280     MOV Buck2VoltagePID, W0
+00049E  400068     ADD W0, #0x8, W0
+0004A0  2F0AD1     MOV #0xF0AD, W1
+0004A2  780801     MOV W1, [W0]
+272:                 
+273:               	Buck2VoltagePID.controlReference = PID_BUCK2_VOLTAGE_REF_MIN;
+0004A4  200900     MOV #0x90, W0
+0004A6  8842C0     MOV W0, 0x858
+274:               
+275:                   Buck2VoltagePID.measuredOutput = 0;           
+0004A8  EF2856     CLR 0x856
+276:                   Buck2ReferenceOld=PID_BUCK2_VOLTAGE_REFERENCE;
+0004AA  205A40     MOV #0x5A4, W0
+0004AC  8842E0     MOV W0, Buck2ReferenceOld
+277:                   Buck2ReferenceNew=PID_BUCK2_VOLTAGE_REFERENCE;
+0004AE  205A40     MOV #0x5A4, W0
+0004B0  8842D0     MOV W0, Buck2ReferenceNew
+278:               }
+0004B2  FA8000     ULNK
+0004B4  060000     RETURN
+279:               void Buck2ReferenceRoutine(void)
+280:               {
+0004B6  FA0000     LNK #0x0
+281:                 /* This routine increments the control reference until the reference reaches 
+282:                    the desired output voltage reference. In this case the we have a softstart of 50ms 
+283:               also in this case controReference stars from 0.
+284:                  */
+285:               if (Buck2VoltagePID.controlReference<Buck2ReferenceOld)
+0004B8  8042C0     MOV 0x858, W0
+0004BA  8042E1     MOV Buck2ReferenceOld, W1
+0004BC  500F81     SUB W0, W1, [W15]
+0004BE  310011     BRA C, .L11
+286:               {
+287:               	while (Buck2VoltagePID.controlReference <= Buck2ReferenceOld)
+0004C0  370005     BRA .L6
+0004CC  8042C0     MOV 0x858, W0
+0004CE  8042E1     MOV Buck2ReferenceOld, W1
+0004D0  500F81     SUB W0, W1, [W15]
+0004D2  36FFF7     BRA LEU, .L7
+0004D4  37000B     BRA .L8
+288:               	{
+289:               		Delay_ms(1);
+0004C2  200010     MOV #0x1, W0
+0004C4  070024     RCALL Delay_ms
+290:               		Buck2VoltagePID.controlReference += BUCK2_SOFTSTART_INCREMENT;
+0004C6  8042C0     MOV 0x858, W0
+0004C8  40007C     ADD W0, #0x1C, W0
+0004CA  8842C0     MOV W0, 0x858
+291:               	}
+292:               }
+293:               else
+294:               {
+295:               	while (Buck2VoltagePID.controlReference > Buck2ReferenceOld)
+0004E2  000000     NOP
+0004E4  8042C0     MOV 0x858, W0
+0004E6  8042E1     MOV Buck2ReferenceOld, W1
+0004E8  500F81     SUB W0, W1, [W15]
+0004EA  3EFFF5     BRA GTU, .L10
+296:               	{
+297:               		Delay_ms(1);
+0004D6  200010     MOV #0x1, W0
+0004D8  07001A     RCALL Delay_ms
+298:               		Buck2VoltagePID.controlReference -= BUCK2_SOFTSTART_INCREMENT;
+0004DA  8042C0     MOV 0x858, W0
+0004DC  50007C     SUB W0, #0x1C, W0
+0004DE  8842C0     MOV W0, 0x858
+0004E0  370001     BRA .L9
+299:               	}
+300:               
+301:               	
+302:               }
+303:               Buck2VoltagePID.controlReference = Buck2ReferenceOld;
+0004EC  8042E0     MOV Buck2ReferenceOld, W0
+0004EE  8842C0     MOV W0, 0x858
+304:               }
+0004F0  FA8000     ULNK
+0004F2  060000     RETURN
+305:               void Buck2RefVoltValInit(void)
+306:               {
+0004F4  FA0000     LNK #0x0
+307:               /*Inicializa la interrupcion por cambio en el pin 14/RB para poder cambiar la referencia
+308:               con el potenciometro*/
+309:               TRISBbits.TRISB8=1; //Pin 14 conectado a sw1 es una entrada digital.
+0004F6  A802C9     BSET 0x2C9, #0
+310:               IEC1bits.CNIE = 1; //Permite las interrupciones por Change Notification//
+0004F8  A86096     BSET IEC1, #3
+311:               CNEN1bits.CN8IE=1;  //Cuando se detecte una transicion en 8 se genera la interrupcion CN
+0004FA  A80061     BSET 0x61, #0
+312:               CNPU1bits.CN8PUE=1; //PullUP activado (no hace falta con sw1)
+0004FC  A80069     BSET 0x69, #0
+313:               IPC4bits.CNIP=4; //Prioridad 4, inferior a la de PMW y conv AD
+0004FE  800561     MOV IPC4, W1
+000500  28FFF0     MOV #0x8FFF, W0
+000502  608000     AND W1, W0, W0
+000504  A0E000     BSET W0, #14
+000506  880560     MOV W0, IPC4
+314:               IFS1bits.CNIF=0; 	//Habilita interrupciones tipo Change Notification
+000508  A96086     BCLR IFS1, #3
+315:               }
+00050A  FA8000     ULNK
+00050C  060000     RETURN
+316:               
+317:               void Delay_ms (unsigned int delay)
+318:               {
+00050E  FA0002     LNK #0x2
+000510  780F00     MOV W0, [W14]
+319:               	TimerInterruptCount = 0;		//Clear Interrupt counter flag 
+000512  EF2868     CLR TimerInterruptCount
+320:               //PR1 = 0x9C40;						//(1ms / 25ns) = 40,000 = 0x9C40 
+321:               //IPC0bits.T1IP = 4;				 	//Set Interrupt Priority lower then ADC
+322:               //IEC0bits.T1IE = 1;					//Enable Timer1 interrupts 
+323:               
+324:               T1CONbits.TON = 1;					//Enable Timer1 
+000514  A8E105     BSET 0x105, #7
+325:               
+326:               while (TimerInterruptCount < delay); //Wait for Interrupt counts to equal delay
+000516  000000     NOP
+000518  804340     MOV TimerInterruptCount, W0
+00051A  500F9E     SUB W0, [W14], [W15]
+00051C  39FFFD     BRA NC, .L14
+327:               
+328:               T1CONbits.TON = 0;					//Disable the Timer 
+00051E  A9E105     BCLR 0x105, #7
+329:               }
+000520  FA8000     ULNK
+000522  060000     RETURN
+330:               

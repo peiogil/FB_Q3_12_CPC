@@ -35,11 +35,11 @@
 .include "p33FJ16GS502.inc"
 .include  "dspcommon.inc"         ; fractsetup
 
-; Buck 2 Maximum Current 3A ==>3/60*20=1V=>1V*1023/1,65=620 MaxCMPDAC=0x16C
-.equ MaxCMPDAC, 0X200
+; Buck 2 Maximum Current 2A ==>2*0,5=1V=>1V*1023/1,65=620 MaxCMPDAC=0x26C
+.equ MaxCMPDAC, 0X3FF
 ; Buck 2 Minimum Duty cycle for minimum dutyvoltage mode control
 ;Buck 2 Minimum Current 0,33A ==>0,33/60*20=0,11V=>0,11V*1024/1,65=68 MinCMPDAC=0x48
-.equ MinCMPDAC, 0X48 
+.equ MinCMPDAC, 0X100 
 
 .equ    offsetabcCoefficients, 0
 .equ    offsetcontrolHistory, 2
@@ -80,7 +80,7 @@ __ADCP0Interrupt:
     mov.w #MaxCMPDAC, w0	; saturate to maximum current
 	cpsgt w0, w1
 	mov.w w0, w1
-	;mov #0x150,w1             ;INSTRUCCION EXTRA PARA ANULAR EL CONTROL EN MODO CORRIENTE Y CARGAR UN VALOR FIJO
+;mov #0x140,w1             ;INSTRUCCION EXTRA PARA ANULAR EL CONTROL EN MODO CORRIENTE Y CARGAR UN VALOR FIJO
 	mov w1, CMPDAC1		  ;Update compator register to compare peak current with voltage value
 				  ;Máximo número 3FF =1023 DA de 10bits
 bclr ADSTAT,	#0	; Clear Pair 0 conversion status bit

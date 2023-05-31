@@ -120,7 +120,7 @@ fractional Buck2VoltageHistory[5] __attribute__ ((section (".ybss, bss, ymemory"
 */
 
 #define ACMP1 0b100111                                  /*ACMP1 asociado a pin 2 current sense*/
-#define PID_BUCK2_VOLTAGE_REFERENCE 0x5A4				/* Reference voltage is from resistor divider circuit R29 & R30
+#define PID_BUCK2_VOLTAGE_REFERENCE 0x9A4				/* Reference voltage is from resistor divider circuit R29 & R30
 													    	Voltage FB2 = (5kOhm / (5kOhm + 3.3kOhm)) * 3.3V = 1.988V
 														    Now calculate expected ADC value (1.988V * 1024)/3.3V = 617 
 															Then left shift by 2 for Q3_12 format (617 * 4) = 2468 = 0x9A4 */
@@ -159,14 +159,15 @@ PTCON2 = 0;	//Divide by 1, maximum PWM timing resolution
 
     IOCON2bits.PENH = 1;               	/* PWM2H is controlled by PWM module */
     IOCON2bits.PENL = 1;                /* PWM2L is controlled by PWM module */
-    IOCON2bits.PMOD = 3;                /* Complementary Output mode*/
-    IOCON2bits.POLH = 0;                /* Drive signals are active-low */
+    IOCON2bits.PMOD = 0;                /* Complementary Output mode*/
+    IOCON2bits.POLH = 1;                /* Drive signals are active-low */
     IOCON2bits.POLL = 0;                /* Drive signals are active-high */
     IOCON2bits.OVRENH = 0;				/* Disable Override feature for shutdown PWM */  
     IOCON2bits.OVRENL = 0;				/* Disable Override feature for shutdown PWM */
     //IOCON2bits.OVRDAT = 0b00;			/* Shut down PWM with Over ride 0 on PWMH and PWML */	
-    IOCON2bits.FLTDAT = 0b11;			/* As IFLTMOD=0 when fault is active 2H = high; 2L = high
-                                          PWML alta en falta para resetear el Cap de la rampa*/
+    IOCON2bits.FLTDAT = 0b01;			/* As IFLTMOD=0 when fault is active 2H = high; 2L = high
+                                          PWML alta en falta para resetear el Cap de la rampa
+                                          PWMH porque la salida del driver es NOT*/
                                         /*El driver TCA428A invierte PWM2H y no invierte PWM2L*/
     DTR2    = 0x60;                	  	/* DTR = (100ns / 1.04ns), where desired dead time is 25ns. 
 									     Mask upper two bits since DTR<13:0> */
@@ -194,7 +195,7 @@ PTCON2 = 0;	//Divide by 1, maximum PWM timing resolution
     FCLCON2bits.FLTMOD = 1; 		/* Fault cycle by cycle */   
     TRGCON2bits.TRGDIV = 0;         /* Trigger interrupt generated every PWM cycle ¿1 EN VEZ DE 0?*/
     TRGCON2bits.TRGSTRT = 0;        /* Trigger generated inmediatly*/    
-	PDC2 =0x800;                        /*0x6C0 Dmax=0,5                                   
+	PDC2 =0x2100;                        /*0x6C0 Dmax=0,5                                   
    //PDC2 = ( PWM_PERIOD*0.9 );      /* Initial pulse-width = minimum deadtime required (DTR2 + ALDTR2)*/
     TRIG2 = 100;		             /* Trigger generated almost at beginning of PWM active period */  
     
