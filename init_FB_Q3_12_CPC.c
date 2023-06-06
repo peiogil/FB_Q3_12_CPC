@@ -33,7 +33,7 @@
 
 #include "p33FJ16GS502.h"
 #include "dsp.h"
-#include "Functions.h"
+#include "CNI_cambio.h"
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~~~  PID Variable Definitions  ~~~~~~~~~~~~~~~~~~~~~~~ */
 
@@ -138,7 +138,7 @@ fractional Buck2VoltageHistory[5] __attribute__ ((section (".ybss, bss, ymemory"
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 extern unsigned int TimerInterruptCount;
 
-unsigned int Buck2ReferenceNew,Buck2ReferenceOld ;
+extern unsigned int Buck2ReferenceNew,Buck2ReferenceOld ;
 
 void Buck2DriveCPC(void)
 {
@@ -165,9 +165,13 @@ PTCON2 = 0;	//Divide by 1, maximum PWM timing resolution
     IOCON2bits.OVRENH = 0;				/* Disable Override feature for shutdown PWM */  
     IOCON2bits.OVRENL = 0;				/* Disable Override feature for shutdown PWM */
     //IOCON2bits.OVRDAT = 0b00;			/* Shut down PWM with Over ride 0 on PWMH and PWML */	
-    IOCON2bits.FLTDAT = 0b01;			/* As IFLTMOD=0 when fault is active 2H = high; 2L = high
-                                          PWML alta en falta para resetear el Cap de la rampa
-                                          PWMH porque la salida del driver es NOT*/
+    IOCON2bits.FLTDAT = 0b01;			/* As IFLTMOD=0 (modo normal) when fault is active PWM2H = high 
+                                        /* because FLTDAT<1>=0 means PWM2H no-active when fault
+                                        /* soas POLH=1 PWM2H=high */
+                                        /*and FLTDAT<0>=1 means PWM2L active when fault, and 
+                                        /* in this case as POLL=0 PWM2L implies PWM2L=high*/
+                                        /*PWML alta en falta para resetear el Cap de la rampa*/
+                                        /* PWMH porque la salida del driver es NOT*/
                                         /*El driver TCA428A invierte PWM2H y no invierte PWM2L*/
     DTR2    = 0x60;                	  	/* DTR = (100ns / 1.04ns), where desired dead time is 25ns. 
 									     Mask upper two bits since DTR<13:0> */
@@ -198,9 +202,10 @@ PTCON2 = 0;	//Divide by 1, maximum PWM timing resolution
 	PDC2 =0x2100;                        /*0x6C0 Dmax=0,5                                   
    //PDC2 = ( PWM_PERIOD*0.9 );      /* Initial pulse-width = minimum deadtime required (DTR2 + ALDTR2)*/
     TRIG2 = 100;		             /* Trigger generated almost at beginning of PWM active period */  
-    
+    /*Inicializa ChangeONInterrupt para on/off con sw1 de la DB*/
+   //CNI_EST=CNI_EST_OFF1;
     /*Inicializa el Timer1 para los delays*/
-    PR1 = 0x9C40;						//(1ms / 25ns) = 40,000 = 0x9C40 
+  PR1 = 0x9C40;						//(1ms / 25ns) = 40,000 = 0x9C40 
 IPC0bits.T1IP = 4;				 	//Set Interrupt Priority lower then ADC
 IEC0bits.T1IE = 1;					//Enable Timer1 interrupts 
 /*Fin de inicializacion del Timer1*/

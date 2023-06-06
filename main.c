@@ -34,6 +34,7 @@
 #include "p33FJ16GS502.h"
 #include "Functions.h"
 #include "dsp.h"
+
 _FOSCSEL(FNOSC_FRC)
 _FOSC(FCKSM_CSECMD & OSCIOFNC_ON)
 _FWDT(FWDTEN_OFF)
@@ -44,8 +45,9 @@ _FICD(ICS_PGD2 & JTAGEN_OFF)
 												Now calculate the ADC expected value = 1.2623/3.3*1023 = 391 */
 #define INPUTOVERVOLTAGE 839						/* Input voltage >15V --> 2.2k/ (10k+2.2k)*15 = 2.70492V
 												Now calculate the ADC expected value  = 2.70492/3.3*1023 = 839 */
-extern unsigned int  Buck2ReferenceNew,Buck2ReferenceOld;
-//extern char OnOffFuente;			
+unsigned int  Buck2ReferenceNew,Buck2ReferenceOld;
+//char OnOffFuente=OFF;			
+
 extern tPID Buck2VoltagePID;
 //extern void CompensarRampa(void);
 
@@ -90,7 +92,7 @@ int main(void)
     Buck2RefVoltValInit();
 
    
-    PTCONbits.PTEN = 1;						/* Enable the PWM */ 
+    PTCONbits.PTEN = 0;						/* Enable the PWM */ 
     ADCONbits.ADON = 1;						/* Enable the ADC */
     Buck2ReferenceRoutine();				/* Initiate Buck 2 soft start to 3.3V */ 
    

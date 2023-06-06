@@ -24,7 +24,7 @@ void BoostVoltageLoop(void);
 void Buck1SoftStartRoutine(void);
 void Buck2SoftStartRoutine(void);
 void BoostSoftStartRoutine(void);
-void Delay_ms(unsigned int delay);
+void Delay_ms(unsigned int);
 void PIDInitBuck2(tPID *);
 void Buck2RefVoltValPotIntr(void);
 void Buck2ReferenceRoutine(void);
