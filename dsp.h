@@ -1640,7 +1640,7 @@ extern fractional* PID (                /* PID Controller Function */
 /*...........................................................................*/
 
 
-extern fractional* PIDBUCK2 (              /* PID Controller Function */
+extern fractional* Flyback (              /* PID Controller Function */
         tPID* controller              /*Pointer to PID controller data structure*/
 );
 

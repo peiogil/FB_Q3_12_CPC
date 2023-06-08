@@ -40,7 +40,7 @@
 .equ MaxCMPDAC, 0X3FF
 ; Buck 2 Minimum Duty cycle for minimum dutyvoltage mode control
 ;Buck 2 Minimum Current 0,33A ==>0,33/60*20=0,11V=>0,11V*1024/1,65=68 MinCMPDAC=0x48
-.equ MinCMPDAC, 0X100 
+.equ MinCMPDAC, 0X40 
 
 .equ    offsetabcCoefficients, 0
 .equ    offsetcontrolHistory, 2
@@ -62,16 +62,16 @@ __ADCP0Interrupt:
     push w0
     push w1 
     push w2  
-
-    mov #_Buck2VoltagePID, w0			
+;bset INTCON1, #15 ;deshabilita anidamiento de interrupciones
+    mov #_FlybackVoltagePID, w0			
     ;mov #617, w1 ;PARA PROBAR 
 	mov ADCBUF1, w1
     sl  w1, #2, w1 ;escalado en 2 bits hacia la izquierda para adecuarlo a 12 bits de
 		  ;de Q3.12
 
     mov w1, [w0+#offsetmeasuredOutput]
-    call _PIDBUCK2 						; Call PIDBUCK2 routine
-     ; return from PIDBUCK2 routine with the updated control voltage
+    call _PIDFlyback 						; Call PIDFlyback  routine
+     ; return from PIDFlyback routine with the updated control voltage
     mov.w [w0+#offsetcontrolOutput], w2 ; Clamp PID output to allowed limits
    asr w2, #5, w1 	;escalado de 5 bits a la derecha para ajustar
 			;16bit(32767) a 10bit del DA del CMPDAC 
@@ -86,7 +86,7 @@ __ADCP0Interrupt:
 				  ;Máximo número 3FF =1023 DA de 10bits
 bclr ADSTAT,	#0	; Clear Pair 0 conversion status bit
 bclr IFS6, #14	; Clear Pair 0 Interrupt Flag
-
+;bclr INTCON1, #15 ;habilita anidamiento de interrupciones
 
 pop w2
 pop w1

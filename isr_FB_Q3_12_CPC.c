@@ -34,27 +34,33 @@
 #include "p33FJ16GS502.h"
 #include "dsp.h"
 #include "Functions.h"
-#include "CNI_cambio.h"
+//#include "CNI_cambio.h"
 
 //extern char OnOffFuente;
 unsigned int TimerInterruptCount = 0; 
 //extern tPID Buck2VoltagePID;
-extern unsigned int Buck2ReferenceNew;
+extern unsigned int FlybackReferenceNew;
 void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt()
 {
   TimerInterruptCount ++; 	/* Increment interrupt counter */
   IFS0bits.T1IF = 0; 		/* Clear Interrupt Flag */
 }
+/* Esta rutina de interrupción deja de usarse porque el pin al que está
+ * conectado el interrupor SW1 pasa a usarse como salida del regulador para
+ * hacer el bode
+ * 
+ */
+/*
 void  __attribute__((__interrupt__, no_auto_psv)) _CNInterrupt()
 {
-    /*
+    
 int VPotRefence;
 while (ADSTATbits.P2RDY ==0);
 VPotRefence=ADCBUF5;
 //Buck2ReferenceNew=VPotRefence<<5; Q0.15
 Buck2ReferenceNew=VPotRefence<<2; //Q3.12 ajuste al decimal
 //Buck2VoltagePID.controlReference=VPotRefence;
- */
+ 
     //CNI sw1 to start and stop the supply
     //With saturation problems at on and off are solved
 
@@ -88,3 +94,4 @@ Buck2ReferenceNew=VPotRefence<<2; //Q3.12 ajuste al decimal
 
 IFS1bits.CNIF=0; 	//Habilita interrupcon de sw1
 }
+*/

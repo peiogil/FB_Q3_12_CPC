@@ -45,18 +45,18 @@ _FICD(ICS_PGD2 & JTAGEN_OFF)
 												Now calculate the ADC expected value = 1.2623/3.3*1023 = 391 */
 #define INPUTOVERVOLTAGE 839						/* Input voltage >15V --> 2.2k/ (10k+2.2k)*15 = 2.70492V
 												Now calculate the ADC expected value  = 2.70492/3.3*1023 = 839 */
-unsigned int  Buck2ReferenceNew,Buck2ReferenceOld;
+unsigned int  FlybackReferenceNew,FlybackReferenceOld;
 //char OnOffFuente=OFF;			
 
-extern tPID Buck2VoltagePID;
+extern tPID FlybackVoltagePID;
 //extern void CompensarRampa(void);
 
 int main(void)
 {
-	int InputVoltage;
+	//int InputVoltage;
 	/* Configure Oscillator to operate the device at 40Mhz
 	   Fosc= Fin*M/(N1*N2), Fcy=Fosc/2
- 	   Fosc= 7.37*(43)/(2*2)=80Mhz for Fosc, Fcy = 40Mhz */
+ 	   Fosc= 7.37*(43)/(2*2)=80MHz for Fosc, Fcy = 40MHz */
 
 	/* Configure PLL prescaler, PLL postscaler, PLL divisor */
 	PLLFBD=41; 				/* M = PLLFBD + 2 */
@@ -78,32 +78,51 @@ int main(void)
 	ACLKCONbits.ENAPLL = 1;					/* Enable Auxiliary PLL */
 	
 	while(ACLKCONbits.APLLCK != 1);			/* Wait for Auxiliary PLL to Lock */
-   //PTPER = 3155;                         /* PTPER = ((1 / 300kHz) / 1.04ns) = 3155, where 300kHz 
-											/* is the desired switching frequency and 1.04ns is PWM resolution. */
-    PTPER = 9075;                         /* PTPER = ((1 / 100kHz) / 1.04ns) = 9075, where 300kHz 
+   											/* is the desired switching frequency and 1.04ns is PWM resolution. */
+    PTPER = 9075;                         /* PTPER = ((1 / 100kHz) / 1.04ns) = 9075, where 100kHz 
 											 /*is the desired switching frequency and 1.04ns is PWM resolution. */
 
 /* For the 2nd buck stage Jumpers J12 and J13 must be populated while J14 and J15 are not. */
 
 				
-	Buck2DriveCPC();				    	/* PWM Setup for 3.3V Buck2 */
-    CurrentandVoltageMeasurements();		/* ADC Setup for bucks and boost */
-	Buck2VoltageLoop();						/* Initialize Buck2 PID */
-    Buck2RefVoltValInit();
+	FlybackDriveCPC();				    	/* PWM Setup for 3.3V Flyback  */
+    CurrentandVoltageMeasurements();		/* ADC Setup for Flyback  */
+	FlybackVoltageLoop();                   /* Initialize Flyback  PID */
+    InitUART1();                            /* Initialize la UART  */
+    //FlybackRefVoltValInit();
 
    
     PTCONbits.PTEN = 0;						/* Enable the PWM */ 
     ADCONbits.ADON = 1;						/* Enable the ADC */
-    Buck2ReferenceRoutine();				/* Initiate Buck 2 soft start to 3.3V */ 
+    //FlybackReferenceRoutine();				/* Initiate Buck 2 soft start to 3.3V */ 
    
 
     while(1){
 
-if (Buck2ReferenceOld!=Buck2ReferenceNew)
+if (FlybackReferenceOld != FlybackReferenceNew)
 {
-	Buck2ReferenceOld=Buck2ReferenceNew;
-	Buck2ReferenceRoutine(); //actualiza el valor de la referencia
-}			
+	FlybackReferenceOld=FlybackReferenceNew;
+	FlybackReferenceRoutine(); //actualiza el valor de la referencia
+}	
+/* Para hacer que la UART1 funcione por polling
+if(U1STAbits.OERR == 1)
+{
+U1STAbits.OERR = 0;
+continue;
+}
+
+//check for receive errors 
+if(U1STAbits.FERR == 1)
+{
+continue;
+}
+
+    if(U1STAbits.URXDA == 1)
+ReceivedChar();
+*/
+
+
+
 /* Initiate Buck 2 soft start to 3.3V */
 
 /*

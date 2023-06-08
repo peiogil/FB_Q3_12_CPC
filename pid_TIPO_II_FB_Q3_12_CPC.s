@@ -49,10 +49,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; _PIDInitBuck2:
+; _PIDInitFlyback:
 ;
 ; Prototype:
-; void PIDInitBuck2 ( tPID *fooPIDStruct )
+; void PIDInitFlyback ( tPID *fooPIDStruct )
 ;
 ; Operation: This routine clears the delay line elements in the array
 ;            _ControlHistory, as well as clears the current PID output
@@ -79,9 +79,9 @@
 ;............................................................................
 
 ; definicion de la funcion _PIDInitBoost
-.global _PIDInitBuck2
+.global _PIDInitFlyback
 ; inicio de la funcion
-_PIDInitBuck2:
+_PIDInitFlyback:
 ; se resetean las posiciones de memoria donde iran los errores y los d.
 push w0
 add #offsetcontrolOutput, w0
@@ -99,7 +99,7 @@ pop w0
 return
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
-; _PIDBOOST:
+; _PIDFlyback:
 ; Prototype:
 ;              tPID PID ( tPID *fooPIDStruct )
 ;
@@ -144,8 +144,8 @@ return
 ;............................................................................
 ;Justificación de cómo se trabaja con la reprentación Q3.12 en
 ;GuionNoAprendizajePorProyectosPictail_PRACTICAS_PRESENCIAL
-  .global _PIDBUCK2                    ; provide global scope to routine
-_PIDBUCK2:
+  .global _PIDFlyback                    ; provide global scope to routine
+_PIDFlyback:
         ;btg LATD, #1
         ; Save working registers.
         push.s
