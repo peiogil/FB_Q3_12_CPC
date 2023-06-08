@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c init_FB_Q3_12_CPC.c isr_FB_Q3_12_CPC.c pid_TIPO_II_FB_Q3_12_CPC.s isr_asm_FB_Q3_12_CPC.s
+SOURCEFILES_QUOTED_IF_SPACED=main.c init_FB_Q3_12_CPC.c isr_FB_Q3_12_CPC.c pid_TIPO_II_FB_Q3_12_CPC.s isr_asm_FB_Q3_12_CPC.s rs232_params_Q3_12_CPC.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/init_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_FB_Q3_12_CPC.o ${OBJECTDIR}/pid_TIPO_II_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_asm_FB_Q3_12_CPC.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/init_FB_Q3_12_CPC.o.d ${OBJECTDIR}/isr_FB_Q3_12_CPC.o.d ${OBJECTDIR}/pid_TIPO_II_FB_Q3_12_CPC.o.d ${OBJECTDIR}/isr_asm_FB_Q3_12_CPC.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.o ${OBJECTDIR}/init_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_FB_Q3_12_CPC.o ${OBJECTDIR}/pid_TIPO_II_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_asm_FB_Q3_12_CPC.o ${OBJECTDIR}/rs232_params_Q3_12_CPC.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.o.d ${OBJECTDIR}/init_FB_Q3_12_CPC.o.d ${OBJECTDIR}/isr_FB_Q3_12_CPC.o.d ${OBJECTDIR}/pid_TIPO_II_FB_Q3_12_CPC.o.d ${OBJECTDIR}/isr_asm_FB_Q3_12_CPC.o.d ${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/init_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_FB_Q3_12_CPC.o ${OBJECTDIR}/pid_TIPO_II_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_asm_FB_Q3_12_CPC.o
+OBJECTFILES=${OBJECTDIR}/main.o ${OBJECTDIR}/init_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_FB_Q3_12_CPC.o ${OBJECTDIR}/pid_TIPO_II_FB_Q3_12_CPC.o ${OBJECTDIR}/isr_asm_FB_Q3_12_CPC.o ${OBJECTDIR}/rs232_params_Q3_12_CPC.o
 
 # Source Files
-SOURCEFILES=main.c init_FB_Q3_12_CPC.c isr_FB_Q3_12_CPC.c pid_TIPO_II_FB_Q3_12_CPC.s isr_asm_FB_Q3_12_CPC.s
+SOURCEFILES=main.c init_FB_Q3_12_CPC.c isr_FB_Q3_12_CPC.c pid_TIPO_II_FB_Q3_12_CPC.s isr_asm_FB_Q3_12_CPC.s rs232_params_Q3_12_CPC.c
 
 
 CFLAGS=
@@ -115,6 +115,13 @@ ${OBJECTDIR}/isr_FB_Q3_12_CPC.o: isr_FB_Q3_12_CPC.c  nbproject/Makefile-${CND_CO
 	${MP_CC} $(MP_EXTRA_CC_PRE)  isr_FB_Q3_12_CPC.c  -o ${OBJECTDIR}/isr_FB_Q3_12_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/isr_FB_Q3_12_CPC.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/isr_FB_Q3_12_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
+${OBJECTDIR}/rs232_params_Q3_12_CPC.o: rs232_params_Q3_12_CPC.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d 
+	@${RM} ${OBJECTDIR}/rs232_params_Q3_12_CPC.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  rs232_params_Q3_12_CPC.c  -o ${OBJECTDIR}/rs232_params_Q3_12_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
 else
 ${OBJECTDIR}/main.o: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -136,6 +143,13 @@ ${OBJECTDIR}/isr_FB_Q3_12_CPC.o: isr_FB_Q3_12_CPC.c  nbproject/Makefile-${CND_CO
 	@${RM} ${OBJECTDIR}/isr_FB_Q3_12_CPC.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  isr_FB_Q3_12_CPC.c  -o ${OBJECTDIR}/isr_FB_Q3_12_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/isr_FB_Q3_12_CPC.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/isr_FB_Q3_12_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/rs232_params_Q3_12_CPC.o: rs232_params_Q3_12_CPC.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d 
+	@${RM} ${OBJECTDIR}/rs232_params_Q3_12_CPC.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  rs232_params_Q3_12_CPC.c  -o ${OBJECTDIR}/rs232_params_Q3_12_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/rs232_params_Q3_12_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 
@@ -184,12 +198,12 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -D__DEBUG=__DEBUG -D__MPLAB_DEBUGGER_ICD3=1  -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)   -mreserve=data@0x800:0x81F -mreserve=data@0x820:0x821 -mreserve=data@0x822:0x823 -mreserve=data@0x824:0x825 -mreserve=data@0x826:0x84F   -Wl,,,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D__DEBUG=__DEBUG,--defsym=__MPLAB_DEBUGGER_ICD3=1,$(MP_LINKER_FILE_OPTION),--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST) 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -D__DEBUG=__DEBUG -D__MPLAB_DEBUGGER_ICD3=1  -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)   -mreserve=data@0x800:0x81F -mreserve=data@0x820:0x821 -mreserve=data@0x822:0x823 -mreserve=data@0x824:0x825 -mreserve=data@0x826:0x84F   -Wl,,,--defsym=__MPLAB_BUILD=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,-D__DEBUG=__DEBUG,--defsym=__MPLAB_DEBUGGER_ICD3=1,$(MP_LINKER_FILE_OPTION),--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--library-path="C:/Program Files (x86)/Microchip/MPLABC30/v3.31/lib/dsPIC33F",--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST) 
 	
 else
 dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -Wl,,,--defsym=__MPLAB_BUILD=1,$(MP_LINKER_FILE_OPTION),--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST) 
+	${MP_CC} $(MP_EXTRA_LD_PRE)  -o dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}      -mcpu=$(MP_PROCESSOR_OPTION)        -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -Wl,,,--defsym=__MPLAB_BUILD=1,$(MP_LINKER_FILE_OPTION),--check-sections,--data-init,--pack-data,--handles,--isr,--no-gc-sections,--fill-upper=0,--stackguard=16,--library-path="C:/Program Files (x86)/Microchip/MPLABC30/v3.31/lib/dsPIC33F",--no-force-link,--smart-io,-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml$(MP_EXTRA_LD_POST) 
 	${MP_CC_DIR}\\xc16-bin2hex dist/${CND_CONF}/${IMAGE_TYPE}/FLAYBACK_Q3_12_CPC.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} -a  -omf=elf  
 	
 endif

@@ -29,3 +29,4 @@ void PIDInitBuck2(tPID *);
 void Buck2RefVoltValPotIntr(void);
 void Buck2ReferenceRoutine(void);
 void InitUART1(void);
+void ReceivedChar(void);

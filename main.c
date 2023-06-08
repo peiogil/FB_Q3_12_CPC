@@ -53,7 +53,7 @@ extern tPID Buck2VoltagePID;
 
 int main(void)
 {
-	int InputVoltage;
+	//int InputVoltage;
 	/* Configure Oscillator to operate the device at 40Mhz
 	   Fosc= Fin*M/(N1*N2), Fcy=Fosc/2
  	   Fosc= 7.37*(43)/(2*2)=80Mhz for Fosc, Fcy = 40Mhz */
@@ -80,7 +80,7 @@ int main(void)
 	while(ACLKCONbits.APLLCK != 1);			/* Wait for Auxiliary PLL to Lock */
    //PTPER = 3155;                         /* PTPER = ((1 / 300kHz) / 1.04ns) = 3155, where 300kHz 
 											/* is the desired switching frequency and 1.04ns is PWM resolution. */
-    PTPER = 9075;                         /* PTPER = ((1 / 100kHz) / 1.04ns) = 9075, where 300kHz 
+    PTPER = 9075;                         /* PTPER = ((1 / 100kHz) / 1.04ns) = 9075, where 100kHz 
 											 /*is the desired switching frequency and 1.04ns is PWM resolution. */
 
 /* For the 2nd buck stage Jumpers J12 and J13 must be populated while J14 and J15 are not. */
@@ -89,6 +89,7 @@ int main(void)
 	Buck2DriveCPC();				    	/* PWM Setup for 3.3V Buck2 */
     CurrentandVoltageMeasurements();		/* ADC Setup for bucks and boost */
 	Buck2VoltageLoop();						/* Initialize Buck2 PID */
+    InitUART1();
     Buck2RefVoltValInit();
 
    
@@ -99,11 +100,30 @@ int main(void)
 
     while(1){
 
-if (Buck2ReferenceOld!=Buck2ReferenceNew)
+if (Buck2ReferenceOld != Buck2ReferenceNew)
 {
 	Buck2ReferenceOld=Buck2ReferenceNew;
 	Buck2ReferenceRoutine(); //actualiza el valor de la referencia
-}			
+}	
+/* Para hacer que la UART1 funcione por polling
+if(U1STAbits.OERR == 1)
+{
+U1STAbits.OERR = 0;
+continue;
+}
+
+//check for receive errors 
+if(U1STAbits.FERR == 1)
+{
+continue;
+}
+
+    if(U1STAbits.URXDA == 1)
+ReceivedChar();
+*/
+
+
+
 /* Initiate Buck 2 soft start to 3.3V */
 
 /*
