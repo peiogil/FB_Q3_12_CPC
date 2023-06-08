@@ -153,7 +153,12 @@ CMPCON1=0x8001;
 PTCONbits.PTEN = 0;	
 // PTCON2: PWM Clock Divider Select Register
 PTCON2 = 0;	//Divide by 1, maximum PWM timing resolution
-
+//Esta instrucción "INTCON1bits.NSTDIS=1" es la que permite
+//que la comunicación serie, y que con ella la USB
+//no se bloquee.
+// su gemela con control en modo tensión Q3.12 yla UART no la necesita 
+//INTCON1bits.NSTDIS=0; // aunque es por defecto;
+INTCON1bits.NSTDIS=1;  //deshabilitado anidamiento de interrupciones
 	
     /* FlyBack converter setup to output 3.3V */ 
 
@@ -228,7 +233,7 @@ void CurrentandVoltageMeasurements(void)
 
     IEC6bits.ADCP0IE = 1;				  /* Enable the ADC Pair 0 interrupt*/
     IFS6bits.ADCP0IF = 0;		    	  /* Clear ADC interrupt flag */ 
-    IPC27bits.ADCP0IP = 5;			      /* Set ADC interrupt priority */ 
+    IPC27bits.ADCP0IP = 7;			      /* Set ADC interrupt priority */ 
 		
   
 	ADPCFGbits.PCFG0 = 0; 			  	  /* PinConCFigAnalog Current Measurement for Buck 2 */ 
@@ -287,7 +292,7 @@ void Buck2ReferenceRoutine(void)
   /* This routine increments the control reference until the reference reaches 
      the desired output voltage reference. In this case the we have a softstart of 50ms 
 also in this case controReference stars from 0.
-   */
+  
 if (Buck2VoltagePID.controlReference<Buck2ReferenceOld)
 {
 	while (Buck2VoltagePID.controlReference <= Buck2ReferenceOld)
@@ -305,7 +310,7 @@ else
 	}
 
 	
-}
+} */
 Buck2VoltagePID.controlReference = Buck2ReferenceOld;
 }
 void Buck2RefVoltValInit(void)
