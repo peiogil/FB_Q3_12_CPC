@@ -187,20 +187,20 @@ _PIDFlyback:
 		sac.r a, [w10]
 ;------Funcion de transferencia a programar----------------------
 ;
-;		 1.638 z^2 + 0.02142 z - 1.617
+;		1.166 z^2 + 0.03476 z - 1.132
 ;		-----------------------------
-;   		z^2 - 1.968 z + 0.9678
+;		  z^2 - 1.877 z + 0.8775
 ;
 ;-----------------------------------------------------------------
-		;[w10] apunta a e[n] de la matriz Buck2Votalge History
-
-; w4 = b1, w5 = e[n-1] , [w8]=b2 ,[w10]=e[n-2]
+		;[w10] apunta a e[n] de la matriz FlybackVoltage History
+		; a = b0 * e[n]
+		; w4 = b1, w5 = e[n-1] , [w8]=b2 ,[w10]=e[n-2]
 		clr a
 		mov [w8++],w4
 		mov [w10++],w5		
 		mac w4*w5, a, [w8]+=2, w4, [w10]+=2, w5
 ;-----------------------------------------------------------------
-		; a = e[n]+b0 * e[n] + b1 * e[n-1]
+		; a = b0 * e[n] + b1 * e[n-1]
 		; w4 = b2, w5 = e[n-2], [w8]=a1 ,[w10]=d[n-1]
 		mac w4*w5, a, [w8]+=2, w4, [w10]+=2, w5
 ;--------------------------------------------------------------------
@@ -209,18 +209,19 @@ _PIDFlyback:
 		mac w4*w5, a, [w8]+=2, w4, [w10]+=2, w5
 
 ;-------------------------------------------------------------------
-		;a = e[n]+b0 * e[n] + b1 * e[n-1] + b2 * e[n-2] +a1 * d[n-1]
+		;a = b0 * e[n] + b1 * e[n-1] + b2 * e[n-2] +a1 * d[n-1]
 		; w4 = a2, w5 = d[n-2], [w8]=a2 ,[w10]=d[n-1]
 		mac w4*w5, a, [w8], w4, [w10]-=2, w5
 		; se mete d[n-2] en el registro intermedio del acumulador b (high)
 ;-----------------------------------------------------------------------------
-		; a = e[n]+b0 * e[n] + b1 * e[n-1] + b2 * e[n-2] +a1 * d[n-1]+ a2 * d[n-2] 
+		; a = b0 * e[n] + b1 * e[n-1] + b2 * e[n-2] +a1 * d[n-1]+ a2 * d[n-2] 
 		mac w4*w5, a, 	
 ;-------------------------------------------------------------------------------
 ;Se guarda a en w5 para conservar el signo 
 sac a,w5
 ;Se deplaza el acumulador 3 posiciones
-;hacia la izquierda para ajustar a Q3_12
+;hacia la izquierda para ajustar a Q3.12
+;este desplazamiento no afecta a la ganancia del lazo, es solo para el formato
 sftac a,#-3
 sac.r a,w4
 ;Ahora, el signo guardado en w5, se pasa a w4

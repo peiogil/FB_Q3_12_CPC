@@ -234,11 +234,11 @@ void CurrentandVoltageMeasurements(void) {
 
 
     ADSTATbits.P0RDY = 0; /* Clear Pair 0, AN0&AN1, data ready bit */
-    ADCPC0bits.IRQEN0 = 1; /* Enable ADC Interrupt for Buck 2 control loop: current&voltage */
+    ADCPC0bits.IRQEN0 = 1; /* Enable ADC Interrupt for Flyback control loop: current&voltage */
     ADCPC0bits.TRGSRC0 = 5; /* ADC Pair 0 triggered by PWM Generator 2 ¿1? primary trigger */
 
     /*lo que se entiende de las hojas es para PWM generator 2 ADCPC0bits.TRGSRC1 = 5 ¿?*/
-
+    /*TBD, de momento no se utiliza la medida de Vin */
     ADSTATbits.P2RDY = 0; /* Clear Pair 2 data ready bit */
     ADCPC1bits.IRQEN2 = 0; /* Enable ADC Interrupt for input voltage measurement */
     ADCPC1bits.TRGSRC2 = 5; /* ADC Pair 2 triggered by PWM Generator 2 ¿1 con trgsrc1=4? primary trigger */
@@ -285,7 +285,7 @@ void FlybackReferenceRoutine(void) {
   {
       while (FlybackVoltagePID.controlReference <= FlybackReferenceOld)
       {
-          Delay_ms(1);
+          Delay_ms(5);
           FlybackVoltagePID.controlReference += FLYBACK_SOFTSTART_INCREMENT;
       }
   }
@@ -293,7 +293,7 @@ void FlybackReferenceRoutine(void) {
   {
       while (FlybackVoltagePID.controlReference >= FlybackReferenceOld)
       {
-          Delay_ms(1);
+          Delay_ms(5);
           FlybackVoltagePID.controlReference -= FLYBACK_SOFTSTART_INCREMENT;
       }
 
