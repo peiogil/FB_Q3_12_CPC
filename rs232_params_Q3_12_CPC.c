@@ -86,11 +86,11 @@ case ON_BUCK2:
                         //PTPER=9614; // PTPER = ((1 / 100kHz) / 1.04ns) = 9614                
                         
           /*                                                                                 
-            Buck2VoltagePID.abcCoefficients[0] = PID_BUCK2_B0;
-            Buck2VoltagePID.abcCoefficients[1] = PID_BUCK2_B1;
-            Buck2VoltagePID.abcCoefficients[2] = PID_BUCK2_B2;
-            Buck2VoltagePID.abcCoefficients[3] = PID_BUCK2_A1;
-            Buck2VoltagePID.abcCoefficients[4] = PID_BUCK2_A2;
+            FlybackVoltagePID.abcCoefficients[0] = PID_BUCK2_B0;
+            FlybackVoltagePID.abcCoefficients[1] = PID_BUCK2_B1;
+            FlybackVoltagePID.abcCoefficients[2] = PID_BUCK2_B2;
+            FlybackVoltagePID.abcCoefficients[3] = PID_BUCK2_A1;
+            FlybackVoltagePID.abcCoefficients[4] = PID_BUCK2_A2;
            */
           
             
@@ -148,7 +148,7 @@ break;
 
 case TENSION_SALIDA_BUCK2:
  
-//en vez de volver a hacer la medida se aprovecha que esta en Buck2VoltagePID.measuredOutput
+//en vez de volver a hacer la medida se aprovecha que esta en FlybackVoltagePID.measuredOutput
 //primer acceso 
 if (cont_TX_bits==0)
 {

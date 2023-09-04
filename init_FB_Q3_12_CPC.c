@@ -226,8 +226,8 @@ void CurrentandVoltageMeasurements(void) {
     IPC27bits.ADCP0IP = 7; /* Set ADC interrupt priority */
 
 
-    ADPCFGbits.PCFG0 = 0; /* PinConCFigAnalog Current Measurement for Buck 2 */
-    ADPCFGbits.PCFG1 = 0; /* PinConCFigAnalog Voltage Measurement for Buck 2 */
+    ADPCFGbits.PCFG0 = 0; /* PinConCFigAnalog Current Measurement for Flyback */
+    ADPCFGbits.PCFG1 = 0; /* PinConCFigAnalog Voltage Measurement for Flyback */
 
     ADPCFGbits.PCFG4 = 0; /* PinConCFigAnalog Voltage Measurement for input voltage source */
 

@@ -36,10 +36,10 @@
 .include  "dspcommon.inc"         ; fractsetup
 
 
-; Buck 2 Maximum Current 3A ==>2*0,5=1V=>1V*1023/1,65=1023  MaxCMPDAC=0x3FF
+; Flyback Maximum Current 3A ==>2*0,5=1V=>1V*1023/1,65=1023  MaxCMPDAC=0x3FF
 .equ MaxCMPDAC, 0X3FF
-; Buck 2 Minimum Duty cycle for minimum dutyvoltage mode control
-;Buck 2 Minimum Current 0,33A ==>0,33/60*20=0,11V=>0,11V*1024/1,65=68 MinCMPDAC=0x48
+; Flyback Minimum Duty cycle for minimum dutyvoltage mode control
+;Flyback Minimum Current 0,33A ==>0,33/60*20=0,11V=>0,11V*1024/1,65=68 MinCMPDAC=0x48
 .equ MinCMPDAC, 0X40
 ; estos números se corrsponden con el máximo del buffer CMPREF
 ; por eso se hace primero el desplazamiento sr de 5 de w2 y luego las comparaciones

@@ -31,25 +31,37 @@
 *
 *******************************************************************************/
 
+
+//FOSCSEL
+#pragma config FNOSC=FRC
+//_FOSCSEL(FNOSC_FRC)
+//FOSC
+#pragma config FCKSM=CSECMD
+#pragma config OSCIOFNC=ON     
+//_FOSC(FCKSM_CSECMD & OSCIOFNC_ON)
+//FWDT
+//_FWDT(FWDTEN_OFF)
+#pragma config FWDTEN=OFF
+//FPOR
+#pragma config  FPWRT= PWR128      
+//_FPOR(FPWRT_PWR128)
+//FICD
+#pragma config   ICS= PGD3
+#pragma config  JTAGEN=OFF     
+//_FICD(ICS_PGD3 & JTAGEN_OFF)
+
 #include "p33FJ16GS502.h"
 #include "Functions.h"
 #include "dsp.h"
-
-_FOSCSEL(FNOSC_FRC)
-_FOSC(FCKSM_CSECMD & OSCIOFNC_ON)
-_FWDT(FWDTEN_OFF)
-_FPOR(FPWRT_PWR128)
-_FICD(ICS_PGD2 & JTAGEN_OFF)
-
 #define INPUTUNDERVOLTAGE 391					/* Input voltage <7V --> 2.2k/(10k+2.2k)*7V = 1.2623V
 												Now calculate the ADC expected value = 1.2623/3.3*1023 = 391 */
 #define INPUTOVERVOLTAGE 839						/* Input voltage >15V --> 2.2k/ (10k+2.2k)*15 = 2.70492V
 												Now calculate the ADC expected value  = 2.70492/3.3*1023 = 839 */
 unsigned int  FlybackReferenceNew,FlybackReferenceOld;
-//char OnOffFuente=OFF;			
+	
 
 extern tPID FlybackVoltagePID;
-//extern void CompensarRampa(void);
+
 
 int main(void)
 {
@@ -94,7 +106,7 @@ int main(void)
    
     PTCONbits.PTEN = 0;						/* Enable the PWM */ 
     ADCONbits.ADON = 1;						/* Enable the ADC */
-    //FlybackReferenceRoutine();				/* Initiate Buck 2 soft start to 3.3V */ 
+    //FlybackReferenceRoutine();				/* Initiate Flyback  soft start to 3.3V */ 
    
 
     while(1){
@@ -123,7 +135,7 @@ ReceivedChar();
 
 
 
-/* Initiate Buck 2 soft start to 3.3V */
+/* Initiate Flyback soft start to 3.3V */
 
 /*
 	

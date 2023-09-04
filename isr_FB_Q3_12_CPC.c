@@ -38,7 +38,7 @@
 
 //extern char OnOffFuente;
 unsigned int TimerInterruptCount = 0; 
-//extern tPID Buck2VoltagePID;
+//extern tPID FlybackVoltagePID;
 extern unsigned int FlybackReferenceNew;
 void __attribute__((__interrupt__, no_auto_psv)) _T1Interrupt()
 {
@@ -57,9 +57,9 @@ void  __attribute__((__interrupt__, no_auto_psv)) _CNInterrupt()
 int VPotRefence;
 while (ADSTATbits.P2RDY ==0);
 VPotRefence=ADCBUF5;
-//Buck2ReferenceNew=VPotRefence<<5; Q0.15
-Buck2ReferenceNew=VPotRefence<<2; //Q3.12 ajuste al decimal
-//Buck2VoltagePID.controlReference=VPotRefence;
+//FlybackReferenceNew=VPotRefence<<5; Q0.15
+FlybackReferenceNew=VPotRefence<<2; //Q3.12 ajuste al decimal
+//FlybackVoltagePID.controlReference=VPotRefence;
  
     //CNI sw1 to start and stop the supply
     //With saturation problems at on and off are solved
