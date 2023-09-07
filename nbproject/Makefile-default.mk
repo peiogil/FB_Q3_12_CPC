@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=src/isr_asm_Q3_12_buck2_CPC.s src/isr_CPC.c src/init_FB_Q15_CPC.c src/main_Q15_CPC.c src/pid_TIPO_II_FB_Q15_CPC.s
+SOURCEFILES_QUOTED_IF_SPACED=src/isr_asm_Q3_12_buck2_CPC.s src/init_FB_Q15_CPC.c src/main_Q15_CPC.c src/pid_TIPO_II_FB_Q15_CPC.s src/isr_Q15_CPC.c src/pid_TIPO_II_FB_Q0_15_CPC.s
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o ${OBJECTDIR}/src/isr_CPC.o ${OBJECTDIR}/src/init_FB_Q15_CPC.o ${OBJECTDIR}/src/main_Q15_CPC.o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o.d ${OBJECTDIR}/src/isr_CPC.o.d ${OBJECTDIR}/src/init_FB_Q15_CPC.o.d ${OBJECTDIR}/src/main_Q15_CPC.o.d ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o ${OBJECTDIR}/src/init_FB_Q15_CPC.o ${OBJECTDIR}/src/main_Q15_CPC.o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o ${OBJECTDIR}/src/isr_Q15_CPC.o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o.d ${OBJECTDIR}/src/init_FB_Q15_CPC.o.d ${OBJECTDIR}/src/main_Q15_CPC.o.d ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o.d ${OBJECTDIR}/src/isr_Q15_CPC.o.d ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o ${OBJECTDIR}/src/isr_CPC.o ${OBJECTDIR}/src/init_FB_Q15_CPC.o ${OBJECTDIR}/src/main_Q15_CPC.o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o
+OBJECTFILES=${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o ${OBJECTDIR}/src/init_FB_Q15_CPC.o ${OBJECTDIR}/src/main_Q15_CPC.o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o ${OBJECTDIR}/src/isr_Q15_CPC.o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o
 
 # Source Files
-SOURCEFILES=src/isr_asm_Q3_12_buck2_CPC.s src/isr_CPC.c src/init_FB_Q15_CPC.c src/main_Q15_CPC.c src/pid_TIPO_II_FB_Q15_CPC.s
+SOURCEFILES=src/isr_asm_Q3_12_buck2_CPC.s src/init_FB_Q15_CPC.c src/main_Q15_CPC.c src/pid_TIPO_II_FB_Q15_CPC.s src/isr_Q15_CPC.c src/pid_TIPO_II_FB_Q0_15_CPC.s
 
 
 CFLAGS=
@@ -94,13 +94,6 @@ MP_LINKER_FILE_OPTION=,--script=p33FJ16GS502.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/src/isr_CPC.o: src/isr_CPC.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/src" 
-	@${RM} ${OBJECTDIR}/src/isr_CPC.o.d 
-	@${RM} ${OBJECTDIR}/src/isr_CPC.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  src/isr_CPC.c  -o ${OBJECTDIR}/src/isr_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/src/isr_CPC.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"h" -I"inc" -I"C:/Program Files (x86)/Microchip/MPLABC30/v3.31/include" -msmart-io=1 -msfr-warn=off  
-	@${FIXDEPS} "${OBJECTDIR}/src/isr_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
 ${OBJECTDIR}/src/init_FB_Q15_CPC.o: src/init_FB_Q15_CPC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src" 
 	@${RM} ${OBJECTDIR}/src/init_FB_Q15_CPC.o.d 
@@ -115,14 +108,14 @@ ${OBJECTDIR}/src/main_Q15_CPC.o: src/main_Q15_CPC.c  nbproject/Makefile-${CND_CO
 	${MP_CC} $(MP_EXTRA_CC_PRE)  src/main_Q15_CPC.c  -o ${OBJECTDIR}/src/main_Q15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/src/main_Q15_CPC.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"h" -I"inc" -I"C:/Program Files (x86)/Microchip/MPLABC30/v3.31/include" -msmart-io=1 -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/src/main_Q15_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-else
-${OBJECTDIR}/src/isr_CPC.o: src/isr_CPC.c  nbproject/Makefile-${CND_CONF}.mk
+${OBJECTDIR}/src/isr_Q15_CPC.o: src/isr_Q15_CPC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src" 
-	@${RM} ${OBJECTDIR}/src/isr_CPC.o.d 
-	@${RM} ${OBJECTDIR}/src/isr_CPC.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  src/isr_CPC.c  -o ${OBJECTDIR}/src/isr_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/src/isr_CPC.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"h" -I"inc" -I"C:/Program Files (x86)/Microchip/MPLABC30/v3.31/include" -msmart-io=1 -msfr-warn=off  
-	@${FIXDEPS} "${OBJECTDIR}/src/isr_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	@${RM} ${OBJECTDIR}/src/isr_Q15_CPC.o.d 
+	@${RM} ${OBJECTDIR}/src/isr_Q15_CPC.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  src/isr_Q15_CPC.c  -o ${OBJECTDIR}/src/isr_Q15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/src/isr_Q15_CPC.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1    -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"h" -I"inc" -I"C:/Program Files (x86)/Microchip/MPLABC30/v3.31/include" -msmart-io=1 -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/src/isr_Q15_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
+else
 ${OBJECTDIR}/src/init_FB_Q15_CPC.o: src/init_FB_Q15_CPC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src" 
 	@${RM} ${OBJECTDIR}/src/init_FB_Q15_CPC.o.d 
@@ -136,6 +129,13 @@ ${OBJECTDIR}/src/main_Q15_CPC.o: src/main_Q15_CPC.c  nbproject/Makefile-${CND_CO
 	@${RM} ${OBJECTDIR}/src/main_Q15_CPC.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  src/main_Q15_CPC.c  -o ${OBJECTDIR}/src/main_Q15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/src/main_Q15_CPC.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"h" -I"inc" -I"C:/Program Files (x86)/Microchip/MPLABC30/v3.31/include" -msmart-io=1 -msfr-warn=off  
 	@${FIXDEPS} "${OBJECTDIR}/src/main_Q15_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/src/isr_Q15_CPC.o: src/isr_Q15_CPC.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/isr_Q15_CPC.o.d 
+	@${RM} ${OBJECTDIR}/src/isr_Q15_CPC.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  src/isr_Q15_CPC.c  -o ${OBJECTDIR}/src/isr_Q15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/src/isr_Q15_CPC.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -I"h" -I"inc" -I"C:/Program Files (x86)/Microchip/MPLABC30/v3.31/include" -msmart-io=1 -msfr-warn=off  
+	@${FIXDEPS} "${OBJECTDIR}/src/isr_Q15_CPC.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 
@@ -156,6 +156,13 @@ ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o: src/pid_TIPO_II_FB_Q15_CPC.s  nbproje
 	${MP_CC} $(MP_EXTRA_AS_PRE)  src/pid_TIPO_II_FB_Q15_CPC.s  -o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1  -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  -I"h" -I"inc" -Wa,-MD,"${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o.d",--defsym=__MPLAB_BUILD=1,--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1,-g,--no-relax$(MP_EXTRA_AS_POST)
 	@${FIXDEPS} "${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o.d"  $(SILENT)  -rsi ${MP_CC_DIR}../  
 	
+${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o: src/pid_TIPO_II_FB_Q0_15_CPC.s  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d 
+	@${RM} ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  src/pid_TIPO_II_FB_Q0_15_CPC.s  -o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1  -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  -I"h" -I"inc" -Wa,-MD,"${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d",--defsym=__MPLAB_BUILD=1,--defsym=__ICD2RAM=1,--defsym=__MPLAB_DEBUG=1,--defsym=__DEBUG=1,--defsym=__MPLAB_DEBUGGER_ICD3=1,-g,--no-relax$(MP_EXTRA_AS_POST)
+	@${FIXDEPS} "${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d"  $(SILENT)  -rsi ${MP_CC_DIR}../  
+	
 else
 ${OBJECTDIR}/src/isr_asm_Q3_12_buck2_CPC.o: src/isr_asm_Q3_12_buck2_CPC.s  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}/src" 
@@ -170,6 +177,13 @@ ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o: src/pid_TIPO_II_FB_Q15_CPC.s  nbproje
 	@${RM} ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o 
 	${MP_CC} $(MP_EXTRA_AS_PRE)  src/pid_TIPO_II_FB_Q15_CPC.s  -o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  -I"h" -I"inc" -Wa,-MD,"${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o.d",--defsym=__MPLAB_BUILD=1,-g,--no-relax$(MP_EXTRA_AS_POST)
 	@${FIXDEPS} "${OBJECTDIR}/src/pid_TIPO_II_FB_Q15_CPC.o.d"  $(SILENT)  -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o: src/pid_TIPO_II_FB_Q0_15_CPC.s  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}/src" 
+	@${RM} ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d 
+	@${RM} ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o 
+	${MP_CC} $(MP_EXTRA_AS_PRE)  src/pid_TIPO_II_FB_Q0_15_CPC.s  -o ${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -omf=elf -DXPRJ_default=$(CND_CONF)  -no-legacy-libc  -I"h" -I"inc" -Wa,-MD,"${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d",--defsym=__MPLAB_BUILD=1,-g,--no-relax$(MP_EXTRA_AS_POST)
+	@${FIXDEPS} "${OBJECTDIR}/src/pid_TIPO_II_FB_Q0_15_CPC.o.d"  $(SILENT)  -rsi ${MP_CC_DIR}../  
 	
 endif
 
