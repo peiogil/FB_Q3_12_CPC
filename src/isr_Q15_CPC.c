@@ -48,7 +48,7 @@ void  __attribute__((__interrupt__, no_auto_psv)) _CNInterrupt()
 int VPotRefence;
 while (ADSTATbits.P2RDY ==0);
 VPotRefence=ADCBUF5;
-//Buck2ReferenceNew=VPotRefence<<5; Q0.15
+FlybackReferenceNew=VPotRefence<<5; //Q0.15
 //Buck2ReferenceNew=VPotRefence<<2; //Q3.12 ajuste al decimal
 FlybackVoltagePID.controlReference=VPotRefence;
 

@@ -33,6 +33,8 @@
 #include "p33FJ16GS502.h"
 #include "Functions.h"
 #include "dsp.h"
+//La dos sintaxis de configuración sirven, pero no sé dde dónde la saque.
+//las dos funcionan. la que usa #pragama está en desuso.
 int FBS __attribute__((space(prog), address(0xF80000))) = 0xF ;
 //_FBS(
 //    BWRP_WRPROTECT_OFF & // Boot Segment Write Protect (Boot Segment may be written)
